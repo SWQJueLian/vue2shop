@@ -6,6 +6,34 @@
         <h3>手机号登录</h3>
         <p>未注册的手机号登录后将自动注册</p>
       </div>
+      <van-form>
+        <van-field v-model.trim="mobile"
+                   clearable
+                   label="手机号码"
+                   type="tel"
+                   placeholder="请输入手机号码"
+                   :rules="[{validator: validatorMobile, message:'手机号格式错误'}]">
+        </van-field>
+        <van-field v-model="code"
+                   clearable
+                   label="图形验证码"
+                   placeholder="请输入图形验证码"
+                   :rules="[{validator: validatorCode, message:'请输入4位图形验证码'}]"
+        >
+          <template #extra>
+            <img class="code" v-if="codePic" @click="getCode()" :src="codePic" alt="">
+          </template>
+        </van-field>
+        <van-field v-model="smscode" clearable required label="短信验证码" placeholder="请输入短信验证码"
+                   :rules="[{validator: validatorSMSCode, message:'短信验证码格式错误'}]">
+          <template #button>
+            <van-button @click="getSMSCode" :disabled="totalSecond !== currentSecond" size="small" type="primary">
+              {{ totalSecond === currentSecond ? '获取验证码' : `${currentSecond}秒后重新发送` }}
+            </van-button>
+          </template>
+        </van-field>
+      </van-form>
+      <!--
 
       <div class="form">
         <div class="form-item">
@@ -22,6 +50,7 @@
           </button>
         </div>
       </div>
+      -->
 
       <div class="login-btn">登录</div>
     </div>
@@ -48,13 +77,30 @@ export default {
       code: '', // 用户输入的图形验证码
       mobile: '', // 用户手机号
       smstimer: null,
-      totalSecond: 60,
-      currentSecond: 60
+      totalSecond: 5,
+      currentSecond: 5,
+      smscode: '' // 用户输入的短信验证码
     }
   },
   methods: {
+    // 校验手机号
+    validatorMobile (val) {
+      console.log(val)
+      return /^[1,3-9]\d{10}$/.test(val)
+    },
+    // 校验图形验证码
+    validatorCode (val) {
+      return /^\w{4}$/.test(val)
+    },
+    // 校验短信验证码
+    validatorSMSCode (val) {
+      return /^\w{6}$/.test(val)
+    },
     async getSMSCode () {
-      console.log('get SMSCODE')
+      if (!(this.validatorCode(this.code) && this.validatorMobile(this.mobile))) {
+        this.$toast('校验不通过！不发送短信验证码')
+        return
+      }
       if (!this.smstimer && this.currentSecond === this.totalSecond) {
         // 计算倒计时，用于前端显示倒计时
         this.smstimer = setInterval(() => {
@@ -62,6 +108,7 @@ export default {
           this.currentSecond--
           // 判断自减完后是否等于小于0，如果是则移除定时器，重置currentSecond的值
           if (this.currentSecond <= 0) {
+            clearInterval(this.smstimer)
             this.smstimer = null
             this.currentSecond = this.totalSecond
           }
@@ -97,8 +144,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.code {
+  margin-left: 8px;
+  width: 94px;
+  height: 31px;
+}
+
 .container {
-  padding: 49px 29px;
+  padding: 49px 10px;
 
   .title {
     margin-bottom: 20px;
@@ -129,11 +182,6 @@ export default {
       height: 32px;
       font-size: 14px;
       flex: 1;
-    }
-
-    img {
-      width: 94px;
-      height: 31px;
     }
 
     button {
