@@ -3,8 +3,25 @@
 import request from '@/utils/request'
 
 // 获取图形验证码
-const getCode = () => {
+export const getCode = () => {
   return request.get('/captcha/image')
 }
 
-export { getCode }
+export const getSMSCode = (captchaCode, captchaKey, mobile) => {
+  return request.post('/captcha/sendSmsCaptcha', {
+    form: {
+      /**
+       * 图形验证码
+       */
+      captchaCode,
+      /**
+       * 图形验证码key
+       */
+      captchaKey,
+      /**
+       * 接收验证码手机
+       */
+      mobile
+    }
+  })
+}

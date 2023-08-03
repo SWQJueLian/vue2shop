@@ -9,15 +9,15 @@
 
       <div class="form">
         <div class="form-item">
-          <input class="inp" maxlength="11" placeholder="请输入手机号码" type="text">
+          <input v-model="mobile" class="inp" maxlength="11" placeholder="请输入手机号码" type="text">
         </div>
         <div class="form-item">
-          <input class="inp" maxlength="5" placeholder="请输入图形验证码" type="text">
+          <input v-model="code" class="inp" maxlength="5" placeholder="请输入图形验证码" type="text">
           <img v-if="codePic" @click="getCode()" :src="codePic" alt="">
         </div>
         <div class="form-item">
           <input class="inp" placeholder="请输入短信验证码" type="text">
-          <button>获取验证码</button>
+          <button @click="getSMSCode">获取验证码</button>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { getCode } from '@/apis/login'
+import { getCode, getSMSCode } from '@/apis/login'
 // import { Toast } from 'vant'
 
 export default {
@@ -37,11 +37,18 @@ export default {
   },
   data () {
     return {
-      codePic: '',
-      codeKey: ''
+      codePic: '', // 图形验证码
+      codeKey: '', // 图形验证码key
+      code: '', // 用户输入的图形验证码
+      mobile: '' // 用户手机号
     }
   },
   methods: {
+    async getSMSCode () {
+      const resp = await getSMSCode(this.code, this.codeKey, this.mobile)
+      console.log(resp)
+      this.$toast('获取短信验证码成功！')
+    },
     async getCode () {
       // 拆包，类似python中的拆包，因为getCode放回的是一个字典，这里是拿字典key为data
       // data又是一个字典然后又继续往里面拆包，闹到base64和key这两个key值，并且用同名的变量接收。
