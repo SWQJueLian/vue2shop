@@ -1,10 +1,9 @@
+import { getUserInfo, saveUserInfo } from '@/utils/stroage'
+
 export default {
   namespaced: true,
   state: {
-    userinfo: {
-      token: '',
-      userId: ''
-    }
+    userinfo: getUserInfo() // 先从localstorage中取。
   },
   getters: {
     value: state => {
@@ -14,6 +13,7 @@ export default {
   mutations: {
     updateUserInfo (state, payload) {
       state.userinfo = payload
+      saveUserInfo(payload)
     }
   },
   actions: {
