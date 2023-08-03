@@ -28,6 +28,7 @@
 
 <script>
 import { getCode } from '@/apis/login'
+// import { Toast } from 'vant'
 
 export default {
   name: 'LoginPage',
@@ -54,6 +55,12 @@ export default {
       // console.log(key)
       this.codeKey = key
       this.codePic = base64
+      // 测试toast提示
+      // 方法一：需要导入Toast再使用，适合场景：js和vue组件都能用
+      // Toast('获取图片验证码成功')
+
+      // 方法二：使用$toast()， 只能在组件内使用，原理，将toast挂在vue原型上
+      // this.$toast('获取图片验证码成功2')
     }
   }
 }
