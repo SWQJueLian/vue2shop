@@ -11,21 +11,24 @@
                    clearable
                    label="手机号码"
                    type="tel"
+                   maxlength="13"
                    placeholder="请输入手机号码"
-                   :rules="[{validator: validatorMobile, message:'手机号格式错误'}]">
+                   :rules="[{validator: validatorMobile, message:''}]">
         </van-field>
         <van-field v-model="code"
+                   center
                    clearable
+                   maxlength="4"
                    label="图形验证码"
                    placeholder="请输入图形验证码"
-                   :rules="[{validator: validatorCode, message:'请输入4位图形验证码'}]"
+                   :rules="[{validator: validatorCode, message:''}]"
         >
           <template #extra>
             <img class="code" v-if="codePic" @click="getCode()" :src="codePic" alt="">
           </template>
         </van-field>
-        <van-field v-model="smscode" clearable required label="短信验证码" placeholder="请输入短信验证码"
-                   :rules="[{validator: validatorSMSCode, message:'短信验证码格式错误'}]">
+        <van-field v-model="smscode" clearable required maxlength="6" label="短信验证码" placeholder="请输入短信验证码"
+                   :rules="[{validator: validatorSMSCode, message:''}]">
           <template #button>
             <van-button @click="getSMSCode" :disabled="totalSecond !== currentSecond" size="small" type="primary">
               {{ totalSecond === currentSecond ? '获取验证码' : `${currentSecond}秒后重新发送` }}
