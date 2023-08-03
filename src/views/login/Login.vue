@@ -17,7 +17,9 @@
         </div>
         <div class="form-item">
           <input class="inp" placeholder="请输入短信验证码" type="text">
-          <button @click="getSMSCode">获取验证码</button>
+          <button @click="getSMSCode" :disabled="totalSecond !== currentSecond">
+            {{ totalSecond === currentSecond ? '获取验证码' : `${currentSecond}秒后重新发送` }}
+          </button>
         </div>
       </div>
 
@@ -35,19 +37,40 @@ export default {
   created () {
     this.getCode()
   },
+  beforeDestroy () {
+    // 组件销毁时移除定时器
+    clearInterval(this.smstimer)
+  },
   data () {
     return {
       codePic: '', // 图形验证码
       codeKey: '', // 图形验证码key
       code: '', // 用户输入的图形验证码
-      mobile: '' // 用户手机号
+      mobile: '', // 用户手机号
+      smstimer: null,
+      totalSecond: 60,
+      currentSecond: 60
     }
   },
   methods: {
     async getSMSCode () {
-      const resp = await getSMSCode(this.code, this.codeKey, this.mobile)
-      console.log(resp)
-      this.$toast('获取短信验证码成功！')
+      console.log('get SMSCODE')
+      if (!this.smstimer && this.currentSecond === this.totalSecond) {
+        // 计算倒计时，用于前端显示倒计时
+        this.smstimer = setInterval(() => {
+          // 让currentSecond自减1
+          this.currentSecond--
+          // 判断自减完后是否等于小于0，如果是则移除定时器，重置currentSecond的值
+          if (this.currentSecond <= 0) {
+            this.smstimer = null
+            this.currentSecond = this.totalSecond
+          }
+        }, 1000)
+        await getSMSCode(this.code, this.codeKey, this.mobile)
+        this.$toast('获取短信验证码成功！')
+      } else {
+        console.log('频繁获取短信验证码')
+      }
     },
     async getCode () {
       // 拆包，类似python中的拆包，因为getCode放回的是一个字典，这里是拿字典key为data
