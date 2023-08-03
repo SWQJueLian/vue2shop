@@ -27,7 +27,7 @@
             <img class="code" v-if="codePic" @click="getCode()" :src="codePic" alt="">
           </template>
         </van-field>
-        <van-field v-model="smscode" clearable required maxlength="6" label="短信验证码" placeholder="请输入短信验证码"
+        <van-field v-model="smscode" center clearable required maxlength="6" label="短信验证码" placeholder="请输入短信验证码"
                    :rules="[{validator: validatorSMSCode, message:''}]">
           <template #button>
             <van-button @click="getSMSCode" :disabled="totalSecond !== currentSecond" size="small" type="primary">
@@ -62,6 +62,7 @@
 
 <script>
 import { getCode, getSMSCode, loginSystem } from '@/apis/login'
+import { mapMutations } from 'vuex'
 // import { Toast } from 'vant'
 
 export default {
@@ -86,19 +87,22 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('user', ['updateUserInfo']),
     async loginSystem () {
       if (!(this.validatorSMSCode(this.smscode) && this.validatorCode(this.code) && this.validatorMobile(this.mobile))) {
         this.$toast('校验不通过！允许登录系统')
         return
       }
-      const {
-        data: {
-          userId,
-          token
-        }
-      } = await loginSystem(this.mobile, this.smscode)
+      const { data } = await loginSystem(this.mobile, this.smscode)
       // 因为加了统一非200状态码异常拦截，所以await只要没有正常返回就不会执行下面这里的代码
-      console.log(userId, token)
+      // console.log(userId, token)
+      // 添加登录成功toast提示框
+      this.$toast('登录成功！')
+      // 将用户登录成功的信息放入vuex中（包含token和userId）
+      // this.$store.commit('user/updateUserInfo', data)
+      this.updateUserInfo(data) // 因为使用了mapMutations，所以直接用，不需要向上面这样写。
+      // 登录成功后跳转到首页
+      this.$router.push('/home')
     },
     // 校验手机号
     validatorMobile (val) {
