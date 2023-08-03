@@ -25,3 +25,14 @@ export const getSMSCode = (captchaCode, captchaKey, mobile) => {
     }
   })
 }
+
+export const loginSystem = (mobile, smsCode) => {
+  return request.post('/passport/login', {
+    form: {
+      isParty: false,
+      mobile,
+      partyData: {},
+      smsCode
+    }
+  })
+}

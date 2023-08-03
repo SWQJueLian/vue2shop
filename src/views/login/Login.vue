@@ -52,13 +52,13 @@
       </div>
       -->
 
-      <div class="login-btn">登录</div>
+      <div @click="loginSystem" class="login-btn">登录</div>
     </div>
   </div>
 </template>
 
 <script>
-import { getCode, getSMSCode } from '@/apis/login'
+import { getCode, getSMSCode, loginSystem } from '@/apis/login'
 // import { Toast } from 'vant'
 
 export default {
@@ -83,6 +83,19 @@ export default {
     }
   },
   methods: {
+    async loginSystem () {
+      if (!(this.validatorSMSCode(this.smscode) && this.validatorCode(this.code) && this.validatorMobile(this.mobile))) {
+        this.$toast('校验不通过！允许登录系统')
+        return
+      }
+      const {
+        data: {
+          userId,
+          token
+        }
+      } = await loginSystem(this.mobile, this.smscode)
+      console.log(userId, token)
+    },
     // 校验手机号
     validatorMobile (val) {
       console.log(val)
@@ -94,7 +107,7 @@ export default {
     },
     // 校验短信验证码
     validatorSMSCode (val) {
-      return /^\w{6}$/.test(val)
+      return /^\d{6}$/.test(val)
     },
     async getSMSCode () {
       if (!(this.validatorCode(this.code) && this.validatorMobile(this.mobile))) {
