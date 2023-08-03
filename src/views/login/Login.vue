@@ -94,6 +94,7 @@ export default {
           token
         }
       } = await loginSystem(this.mobile, this.smscode)
+      // 因为加了统一非200状态码异常拦截，所以await只要没有正常返回就不会执行下面这里的代码
       console.log(userId, token)
     },
     // 校验手机号
