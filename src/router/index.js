@@ -5,27 +5,34 @@ import home from '@/views/layout/home.vue'
 import category from '@/views/layout/category.vue'
 import usercenter from '@/views/layout/usercenter.vue'
 import cart from '@/views/layout/cart.vue'
+import login from '@/views/login/Login.vue'
 
 Vue.use(VueRouter)
 
 export const router = new VueRouter({
-  base: '/', // mode: 'history',
-  routes: [{
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    children: [{
-      path: '/home',
-      component: home
-    }, {
-      path: '/category',
-      component: category
-    }, {
-      path: '/user',
-      component: usercenter
-    }, {
-      path: '/cart',
-      component: cart
-    }]
-  }]
+  base: '/',
+  // mode: 'history',
+  routes: [
+    {
+      path: '/',
+      component: Layout,
+      redirect: '/home',
+      children: [
+        {
+          path: '/home',
+          component: home
+        }, {
+          path: '/category',
+          component: category
+        }, {
+          path: '/user',
+          component: usercenter
+        }, {
+          path: '/cart',
+          component: cart
+        }
+      ]
+    },
+    { path: '/login', component: login }
+  ]
 })
