@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <van-nav-bar title="会员登录" left-arrow @click-left="$router.go(-1)" />
+    <van-nav-bar title="会员登录" left-arrow @click-left="$router.go(-1)"/>
     <div class="container">
       <div class="title">
         <h3>手机号登录</h3>
@@ -13,7 +13,7 @@
         </div>
         <div class="form-item">
           <input class="inp" maxlength="5" placeholder="请输入图形验证码" type="text">
-          <img src="@/assets/code.png" alt="">
+          <img v-if="codePic" @click="getCode()" :src="codePic" alt="">
         </div>
         <div class="form-item">
           <input class="inp" placeholder="请输入短信验证码" type="text">
@@ -27,8 +27,35 @@
 </template>
 
 <script>
+import { getCode } from '@/apis/login'
+
 export default {
-  name: 'LoginPage'
+  name: 'LoginPage',
+  created () {
+    this.getCode()
+  },
+  data () {
+    return {
+      codePic: '',
+      codeKey: ''
+    }
+  },
+  methods: {
+    async getCode () {
+      // 拆包，类似python中的拆包，因为getCode放回的是一个字典，这里是拿字典key为data
+      // data又是一个字典然后又继续往里面拆包，闹到base64和key这两个key值，并且用同名的变量接收。
+      const {
+        data: {
+          base64,
+          key
+        }
+      } = await getCode()
+      // console.log(base64)
+      // console.log(key)
+      this.codeKey = key
+      this.codePic = base64
+    }
+  }
 }
 </script>
 
@@ -38,10 +65,12 @@ export default {
 
   .title {
     margin-bottom: 20px;
+
     h3 {
       font-size: 26px;
       font-weight: normal;
     }
+
     p {
       line-height: 40px;
       font-size: 14px;
@@ -55,6 +84,7 @@ export default {
     margin-bottom: 14px;
     display: flex;
     align-items: center;
+
     .inp {
       display: block;
       border: none;
@@ -63,10 +93,12 @@ export default {
       font-size: 14px;
       flex: 1;
     }
+
     img {
       width: 94px;
       height: 31px;
     }
+
     button {
       height: 31px;
       border: none;
@@ -81,10 +113,10 @@ export default {
     width: 100%;
     height: 42px;
     margin-top: 39px;
-    background: linear-gradient(90deg,#ecb53c,#ff9211);
+    background: linear-gradient(90deg, #ecb53c, #ff9211);
     color: #fff;
     border-radius: 39px;
-    box-shadow: 0 10px 20px 0 rgba(0,0,0,.1);
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, .1);
     letter-spacing: 2px;
     display: flex;
     justify-content: center;
