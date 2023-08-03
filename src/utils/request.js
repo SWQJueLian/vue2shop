@@ -14,6 +14,13 @@ const axiosInstance = axios.create({
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
+  console.log('超时时间：', config.timeout)
+  // 请求前统一添加toast提示
+  Toast.loading({
+    message: '请求中...',
+    forbidClick: true, // 禁止触摸背景，可以当成节流来使用。
+    duration: 20 * 1000 // toast展示最大时长（不要设置成0，无限不就卡死了?）
+  })
   return config
 }, function (error) {
   // 对请求错误做些什么
@@ -33,6 +40,8 @@ axiosInstance.interceptors.response.use(function (response) {
     // 这样的话await的函数下面的其他代码就不会执行，就不需要单独再写判断await返回的状态码。
     return Promise.reject(data.message)
   }
+  // 成功获取响应则清除toast
+  Toast.clear()
   return data // (axios会多包装一层data，提前在响应前拦截并返回，减少后面需要resp.data.data之类的调用...)
 }, function (error) {
   // 对响应错误做点什么
