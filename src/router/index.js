@@ -6,10 +6,16 @@ import category from '@/views/layout/category.vue'
 import usercenter from '@/views/layout/usercenter.vue'
 import cart from '@/views/layout/cart.vue'
 import login from '@/views/login/Login.vue'
+import pay from '@/views/pay/Pay.vue'
+import myOrder from '@/views/order/MyOrder.vue'
+import ProductDetail from '@/views/product/ProductDetail.vue'
+import SearchList from '@/views/search/SearchList.vue'
+import Search from '@/views/search/Search.vue'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
-export const router = new VueRouter({
+const router = new VueRouter({
   base: '/',
   // mode: 'history',
   routes: [
@@ -33,6 +39,42 @@ export const router = new VueRouter({
         }
       ]
     },
-    { path: '/login', component: login }
+    {
+      path: '/login',
+      component: login
+    },
+    {
+      path: '/pay',
+      component: pay
+    },
+    {
+      path: '/order',
+      component: myOrder
+    },
+    {
+      path: '/product_detail',
+      component: ProductDetail
+    },
+    {
+      path: '/search_list',
+      component: SearchList
+    },
+    {
+      path: '/search',
+      component: Search
+    }
   ]
 })
+
+const needLoginUrl = ['/pay', '/order']
+router.beforeEach((to, from, next) => {
+  // 判断路由路径是否在需要登录的路径数组中
+  if (needLoginUrl.includes(to.path)) {
+    // 是需要登录后才能访问的页面，则判断是否有token，没有token直接跳转到/login页面
+    if (!store.state.user.userinfo.token) {
+      next('/login')
+    }
+  }
+  next()
+})
+export default router
