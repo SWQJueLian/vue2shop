@@ -104,6 +104,11 @@ export default {
         this.firstPrice = !this.firstPrice
         console.log('name为price，且this,firstPrice为true,设置fristPrice为：', this.firstPrice)
       }
+      // 切到其他没有升序和倒序的tab标签就重置价格这个tab标签
+      if (name !== 'price') {
+        this.sort_price = 0
+        this.firstPrice = true
+      }
     },
     sortSearch (sortType, page, loadmore) {
       // 点击时将finished重置为true，因为切换tab排序标签时，不同排序都有可能有下一页。
@@ -113,6 +118,7 @@ export default {
         console.log('firstPrice为', this.firstPrice, 'sort_price设置为0')
         this.sort_price = 0
       } else if (!loadmore) {
+      // if (!loadmore) {
         this.sort_price = this.sort_price === 0 ? this.sort_price = -1 : this.sort_price = 0
         console.log('非loadmore，firstPrice为', this.firstPrice, `sort_price设置为${this.sort_price}`)
       }
