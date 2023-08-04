@@ -22,7 +22,7 @@
         <van-icon class="tool" name="apps-o" size="25"/>
       </template>
     </van-nav-bar>
-    <van-tabs v-model="active" @click="sortSearch">
+    <van-tabs v-model="active" @click="sortSearch" line-width="60">
       <van-tab name="all" title="👏综合推荐"></van-tab>
       <van-tab name="sales" title="📈销量"></van-tab>
       <van-tab name="price" :title="sort_price === 0 ? '💰价格⬇' : '💰价格⬆'"></van-tab>
@@ -50,6 +50,7 @@ export default {
   created () {
     this.getSearchKeyProductList({
       goodsName: this.search_key,
+      categoryId: this.$route.query.categoryId,
       page: 1
     })
   },
@@ -64,6 +65,7 @@ export default {
       console.log(name, title)
       this.getSearchKeyProductList({
         goodsName: this.search_key,
+        categoryId: this.$route.query.categoryId,
         page: 1, // 暂时写死只获取第一页
         sortType: name,
         sortPrice: this.sort_price
