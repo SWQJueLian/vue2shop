@@ -1,12 +1,13 @@
 <template>
-  <div class="prodetail">
-    <van-nav-bar fixed title="商品详情页" left-arrow @click-left="$router.go(-1)"/>
+  <!-- v-if： 有数据再显示组件 -->
+  <div class="prodetail" v-if="product_detail">
+    <van-nav-bar :placeholder=true fixed title="商品详情页" left-arrow @click-left="$router.go(-1)"/>
     <van-swipe @change="onChange" :autoplay="3000">
       <van-swipe-item v-for="(image, index) in images" :key="index">
-        <img :src="image" />
+        <img :src="image.external_url" />
       </van-swipe-item>
       <template #indicator>
-        <div class="custom-indicator">{{ current + 1 }}/4</div>
+        <div class="custom-indicator">{{ current + 1 }}/ {{ images.length }}</div>
       </template>
     </van-swipe>
 
@@ -14,13 +15,13 @@
     <div class="info">
       <div class="title">
         <div class="price">
-          <span class="now">￥0.01</span>
-          <span class="oldprice">￥6699.00</span>
+          <span class="now">￥{{ product_detail.goods_price_min }}</span>
+          <span class="oldprice">￥{{ product_detail.goods_price_max }}</span>
         </div>
-        <div class="sellcount">已售1001件</div>
+        <div class="sellcount">已售{{ product_detail.goods_sales }}件</div>
       </div>
       <div class="msg text-ellipsis-2">
-        三星手机 SAMSUNG Galaxy S23 8GB+256GB 超视觉夜拍系统 超清夜景 悠雾紫 5G手机 游戏拍照旗舰机s23
+        {{ product_detail.goods_name }}
       </div>
 
       <div class="service">
@@ -78,10 +79,19 @@
 </template>
 
 <script>
+import { getProductDetail } from '@/apis/product'
+
 export default {
   name: 'ProductDetailPage',
+  async created () {
+    const resp = await getProductDetail(this.$route.params.productid)
+    console.log(resp)
+    this.product_detail = resp.data.detail
+    this.images = this.product_detail.goods_images
+  },
   data () {
     return {
+      product_detail: '',
       current: 0,
       images: [
         'https://img01.yzcdn.cn/vant/apple-1.jpg',
@@ -105,7 +115,8 @@ export default {
   bottom: 5px;
   padding: 2px 5px;
   font-size: 12px;
-  background: rgba(0, 0, 0, 0.1);
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
   border-radius: 15px;
 }
 
