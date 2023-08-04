@@ -105,7 +105,10 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+::v-deep .van-tab--active {
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
 .my-swipe .van-swipe-item {
   height: 165px;
   color: #fff;
