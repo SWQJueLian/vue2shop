@@ -14,9 +14,20 @@ import {
   Search,
   Sticky,
   Tab,
-  Swipe, SwipeItem, Grid, GridItem, DropdownMenu, DropdownItem, GoodsAction, GoodsActionButton, GoodsActionIcon, Rate
+  Swipe,
+  SwipeItem,
+  Grid,
+  GridItem,
+  DropdownMenu,
+  DropdownItem,
+  GoodsAction,
+  GoodsActionButton,
+  GoodsActionIcon,
+  Rate,
+  List
 } from 'vant'
 
+Vue.use(List)
 Vue.use(Rate)
 Vue.use(GoodsAction)
 Vue.use(GoodsActionButton)
