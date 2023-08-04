@@ -9,3 +9,23 @@ export const getProductDetail = (goodsId) => {
     }
   })
 }
+
+// 获取商品评价
+export const getProComments = (goodsId, scoreType, page) => {
+  return request.get('/comment/list', {
+    params: {
+      goodsId,
+      scoreType,
+      page
+    }
+  })
+}
+
+// 获取评价总数
+export const getProCommentsCount = (goodsId) => {
+  return request.get('/comment/total', {
+    params: {
+      goodsId
+    }
+  })
+}

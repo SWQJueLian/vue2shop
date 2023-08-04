@@ -4,7 +4,7 @@
     <van-nav-bar :placeholder=true fixed title="商品详情页" left-arrow @click-left="$router.go(-1)"/>
     <van-swipe @change="onChange" :autoplay="3000">
       <van-swipe-item v-for="(image, index) in images" :key="index">
-        <img :src="image.external_url" />
+        <img :src="image.external_url"/>
       </van-swipe-item>
       <template #indicator>
         <div class="custom-indicator">{{ current + 1 }}/ {{ images.length }}</div>
@@ -38,34 +38,30 @@
     <!-- 商品评价 -->
     <div class="comment">
       <div class="comment-title">
-        <div class="left">商品评价 (5条)</div>
+        <div class="left">商品评价 ({{ comment_count }}条)</div>
         <div class="right">查看更多
           <van-icon name="arrow"/>
         </div>
       </div>
       <div class="comment-list">
-        <div class="comment-item" v-for="item in 3" :key="item">
+        <div class="comment-item" v-for="(item, index) in comment_data.data" :key="index">
           <div class="top">
-            <img src="http://cba.itlike.com/public/uploads/10001/20230321/a0db9adb2e666a65bc8dd133fbed7834.png" alt="">
-            <div class="name">神雕大侠</div>
+            <img :src="item.user.avatar_url || defaultImg" alt="">
+            <div class="name">{{ item.user.nick_name }}</div>
             <van-rate :size="16" :value="5" color="#ffd21e" void-icon="star" void-color="#eee"/>
           </div>
           <div class="content">
-            质量很不错 挺喜欢的
+            {{ item.content }}
           </div>
           <div class="time">
-            2023-03-21 15:01:35
+            {{ item.create_time }}
           </div>
         </div>
       </div>
     </div>
-
     <!-- 商品描述 -->
     <div class="desc" style="padding-bottom: 55px">
-      <img src="https://uimgproxy.suning.cn/uimg1/sop/commodity/kHgx21fZMWwqirkMhawkAw.jpg" alt="">
-      <img src="https://uimgproxy.suning.cn/uimg1/sop/commodity/0rRMmncfF0kGjuK5cvLolg.jpg" alt="">
-      <img src="https://uimgproxy.suning.cn/uimg1/sop/commodity/2P04A4Jn0HKxbKYSHc17kw.jpg" alt="">
-      <img src="https://uimgproxy.suning.cn/uimg1/sop/commodity/MT4k-mPd0veQXWPPO5yTIw.jpg" alt="">
+      <div v-html="product_detail.content"></div>
     </div>
 
     <van-goods-action :safe-area-inset-bottom=true>
@@ -79,24 +75,34 @@
 </template>
 
 <script>
-import { getProductDetail } from '@/apis/product'
+import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/product'
+// eslint-disable-next-line no-unused-vars
+import defaultImg from '@/assets/default-avatar.png'
 
 export default {
   name: 'ProductDetailPage',
   async created () {
     const resp = await getProductDetail(this.$route.params.productid)
-    console.log(resp)
+    // console.log(resp)
     this.product_detail = resp.data.detail
     this.images = this.product_detail.goods_images
+
+    // 获取评价信息
+    const commentResp = await getProComments(this.$route.params.productid, -1, 1)
+    // console.log(commentResp)
+    this.comment_data = commentResp.data.list
+
+    const { data: { total } } = await getProCommentsCount(this.$route.params.productid)
+    this.comment_count = total.all
   },
   data () {
     return {
-      product_detail: '',
+      defaultImg, // 用户默认头像
+      comment_data: '', // 商品评价列表数据
+      product_detail: '', // 商品详情数据
       current: 0,
-      images: [
-        'https://img01.yzcdn.cn/vant/apple-1.jpg',
-        'https://img01.yzcdn.cn/vant/apple-2.jpg'
-      ]
+      images: [], // 商品详情轮播图
+      comment_count: 0 // 商品评价总数
     }
   },
   methods: {
@@ -129,6 +135,7 @@ export default {
     display: block;
     width: 100%;
   }
+
   .desc {
     width: 100%;
     overflow: scroll;
