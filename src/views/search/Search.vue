@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getSearchHistory, setSearchHistory } from '@/store/modules/search'
+import { getSearchHistory, setSearchHistory } from '@/utils/stroage'
 
 export default {
   name: 'SearchPage',
@@ -58,16 +58,19 @@ export default {
     },
     // 搜索商品
     searchProduct (key) {
-      // 查找搜索关键词是否已经在搜索历史列表中
-      const index = this.search_history.indexOf(key)
-      // 如果在就删除掉
-      if (index !== -1) {
-        this.search_history.splice(index, 1)
+      // 修复：key为空的时候不保存搜索历史记录。
+      if (key.trim() !== '') {
+        // 查找搜索关键词是否已经在搜索历史列表中
+        const index = this.search_history.indexOf(key)
+        // 如果在就删除掉
+        if (index !== -1) {
+          this.search_history.splice(index, 1)
+        }
+        // 再次将关键词放入到数组的最前面中
+        this.search_history.unshift(key)
+        // 保存到localstorage中
+        setSearchHistory(this.search_history)
       }
-      // 再次将关键词放入到数组的最前面中
-      this.search_history.unshift(key)
-      // 保存到localstorage中
-      setSearchHistory(this.search_history)
       // 跳转到搜索详情页
       this.$router.push(`/search_list?searchkey=${key}`)
     }
