@@ -1,6 +1,33 @@
 import Vue from 'vue'
-import { Button, Tabbar, TabbarItem, NavBar, Toast, Field, Form } from 'vant'
+import {
+  PullRefresh,
+  Image,
+  Tabs,
+  Icon,
+  Button,
+  Tabbar,
+  TabbarItem,
+  NavBar,
+  Toast,
+  Field,
+  Form,
+  Search,
+  Sticky,
+  Tab,
+  Swipe, SwipeItem, Grid, GridItem
+} from 'vant'
 
+Vue.use(PullRefresh)
+Vue.use(Grid)
+Vue.use(GridItem)
+Vue.use(Swipe)
+Vue.use(SwipeItem)
+Vue.use(Image)
+Vue.use(Tab)
+Vue.use(Tabs)
+Vue.use(Icon)
+Vue.use(Sticky)
+Vue.use(Search)
 Vue.use(Form)
 Vue.use(Field)
 Vue.use(Toast)
