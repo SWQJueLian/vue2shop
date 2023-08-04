@@ -33,23 +33,17 @@
 
       <!-- 轮播图 -->
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item>
-          <img src="@/assets/banner1.jpg" alt="">
-        </van-swipe-item>
-        <van-swipe-item>
-          <img src="@/assets/banner2.jpg" alt="">
-        </van-swipe-item>
-        <van-swipe-item>
-          <img src="@/assets/banner3.jpg" alt="">
+        <van-swipe-item v-for="item in bannerImgList" :key="item.imgUrl">
+          <img :src="item.imgUrl" alt="">
         </van-swipe-item>
       </van-swipe>
       <!--导航-->
       <van-grid square column-num="5" icon-size="40" :border="false">
         <van-grid-item
-          v-for="item in 10" :key="item"
-          icon="http://cba.itlike.com/public/uploads/10001/20230320/58a7c1f62df4cb1eb47fe83ff0e566e6.png"
-          text="新品首发"
-          @click="$router.push('/category')"
+          v-for="item in gridList" :key="item.imgUrl"
+          :icon="item.imgUrl"
+          :text="item.text"
+          @click="$router.push(`/category`)"
         />
       </van-grid>
 
@@ -63,7 +57,7 @@
         <p class="guess-title">—— 猜你喜欢 ——</p>
 
         <div class="goods-list">
-          <GoodsItem v-for="item in 10" :key="item"></GoodsItem>
+          <GoodsItem :goods="item" v-for="item in productList" :key="item.goods_id"></GoodsItem>
         </div>
       </div>
     </van-pull-refresh>
@@ -72,14 +66,25 @@
 
 <script>
 import GoodsItem from '@/components/GoodsItem.vue'
+import { getHomeData } from '@/apis/home'
 
 export default {
   name: 'HomePage',
   components: { GoodsItem },
+  async created () {
+    const { data: { pageData } } = await getHomeData()
+    console.log(pageData)
+    this.bannerImgList = pageData.items[1].data
+    this.gridList = pageData.items[3].data
+    this.productList = pageData.items[6].data
+  },
   data () {
     return {
       search_key: '',
-      isLoading: ''
+      isLoading: '',
+      bannerImgList: [],
+      gridList: [],
+      productList: []
     }
   },
   methods: {
