@@ -7,7 +7,7 @@ const baseurl = 'http://cba.itlike.com/public/index.php?s=/api/'
 // axios实例
 const axiosInstance = axios.create({
   baseURL: baseurl,
-  timeout: 5000
+  timeout: 10000
 })
 
 // 添加拦截器
