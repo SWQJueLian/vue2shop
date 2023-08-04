@@ -23,9 +23,9 @@
       </template>
     </van-nav-bar>
     <van-tabs v-model="active" @click="sortSearch">
-      <van-tab name="all" title="综合推荐👏"></van-tab>
-      <van-tab name="sales" title="销量📈"></van-tab>
-      <van-tab name="price" title="价格💰"></van-tab>
+      <van-tab name="all" title="👏综合推荐"></van-tab>
+      <van-tab name="sales" title="📈销量"></van-tab>
+      <van-tab name="price" :title="sort_price === 0 ? '💰价格⬇' : '💰价格⬆'"></van-tab>
     </van-tabs>
     <div class="goods-list">
       <GoodsItem v-for="item in search_result_list" :key="item" :goods="item"></GoodsItem>
