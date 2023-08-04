@@ -21,12 +21,13 @@
           </template>
         </van-nav-bar>
         <van-search
+          @focus="$router.push('/search')"
           autofocus
           v-model="search_key"
           shape="round"
           placeholder="请输入搜索关键词">
           <template #right-icon>
-            <div class="btn-search" @click="onSearch">搜索</div>
+            <div class="mybtn-search" @click="$router.push('/search')">搜索</div>
           </template>
         </van-search>
       </van-sticky>
@@ -104,13 +105,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-.btn-search {
-  padding: 0px 15px 0px 15px;
-  background: linear-gradient(to right, orange, orangered);
-  border-radius: 16px;
-  color: white;
-  cursor: pointer;
-}
 
 .my-swipe .van-swipe-item {
   height: 165px;
