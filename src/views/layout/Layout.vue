@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="text-align: start;">
     <!--二级路由入口-->
     <router-view/>
     <van-tabbar :placeholder=true v-model="active" active-color="#ee0a24" inactive-color="#000">
