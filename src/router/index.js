@@ -52,7 +52,7 @@ const router = new VueRouter({
       component: myOrder
     },
     {
-      path: '/product_detail',
+      path: '/prodetail/:productid',
       component: ProductDetail
     },
     {
