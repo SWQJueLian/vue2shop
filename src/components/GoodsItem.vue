@@ -31,6 +31,7 @@ export default {
 
 <style lang="less" scoped>
 .goods-item {
+  text-align: start;
   height: 148px;
   margin-bottom: 6px;
   padding: 10px;
