@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh" style="min-height: 100vh;">
       <!--顶部-->
       <van-sticky>
         <van-nav-bar
@@ -82,7 +82,7 @@ export default {
   data () {
     return {
       search_key: '',
-      isLoading: '',
+      isLoading: false,
       bannerImgList: [],
       gridList: [],
       productList: []
@@ -137,9 +137,5 @@ export default {
 // 商品样式
 .goods-list {
   background-color: #f6f6f6;
-}
-
-.wocao {
-  display: inline;
 }
 </style>

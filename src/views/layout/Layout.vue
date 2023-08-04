@@ -13,7 +13,12 @@
 
 <script>
 export default {
-  name: 'LayoutPage'
+  name: 'LayoutPage',
+  data () {
+    return {
+      active: ''
+    }
+  }
 }
 </script>
 
