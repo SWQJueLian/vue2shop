@@ -22,7 +22,6 @@
         </van-nav-bar>
         <van-search
           @focus="$router.push('/search')"
-          autofocus
           v-model="search_key"
           shape="round"
           placeholder="请输入搜索关键词">
