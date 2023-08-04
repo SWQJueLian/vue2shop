@@ -1,7 +1,8 @@
 <template>
   <div class="goods-item" @click="$router.push(`/prodetail/${goods.goods_id}`)">
     <div class="left">
-      <img :src="goods.goods_image" alt="" />
+      <!--<img :src="goods.goods_image" alt="" />-->
+      <img v-lazy="goods.goods_image" alt="" />
     </div>
     <div class="right">
       <p class="tit text-ellipsis-2">

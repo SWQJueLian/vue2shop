@@ -24,9 +24,12 @@ import {
   GoodsActionButton,
   GoodsActionIcon,
   Rate,
-  List
+  List, Lazyload
 } from 'vant'
 
+Vue.use(Lazyload, {
+  lazyComponent: true
+})
 Vue.use(List)
 Vue.use(Rate)
 Vue.use(GoodsAction)
