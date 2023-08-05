@@ -1,35 +1,16 @@
 import Vue from 'vue'
 import {
-  PullRefresh,
-  Image,
-  Tabs,
-  Icon,
-  Button,
-  Tabbar,
-  TabbarItem,
-  NavBar,
-  Toast,
-  Field,
-  Form,
-  Search,
-  Sticky,
-  Tab,
-  Swipe,
-  SwipeItem,
-  Grid,
-  GridItem,
-  DropdownMenu,
-  DropdownItem,
-  GoodsAction,
-  GoodsActionButton,
-  GoodsActionIcon,
-  Rate,
-  List, Lazyload
+  PullRefresh, Image, Tabs, Icon, Button, Tabbar, TabbarItem, NavBar, Toast, Field, Form, Search, Sticky, Tab,
+  Swipe, SwipeItem, Grid, GridItem, DropdownMenu, DropdownItem, GoodsAction, GoodsActionButton, GoodsActionIcon, Rate,
+  List, Lazyload, Sku, Cell, CellGroup
 } from 'vant'
 
 Vue.use(Lazyload, {
   lazyComponent: true
 })
+Vue.use(Cell)
+Vue.use(CellGroup)
+Vue.use(Sku)
 Vue.use(List)
 Vue.use(Rate)
 Vue.use(GoodsAction)

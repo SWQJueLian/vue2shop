@@ -64,15 +64,51 @@
       <div v-html="product_detail.content"></div>
     </div>
     <!-- 包多一层div，解决van-goods-action固定底部时并没有占据原来的高度，导致内容显示补全。-->
-    <div style="display: block; height: 51px">
-      <van-goods-action :safe-area-inset-bottom=true>
-        <van-goods-action-icon icon="chat-o" text="客服" dot/>
-        <van-goods-action-icon icon="cart-o" text="购物车" badge="5"/>
-        <van-goods-action-icon icon="shop-o" text="店铺" badge="12"/>
-        <van-goods-action-button type="warning" text="加入购物车"/>
-        <van-goods-action-button type="danger" text="立即购买"/>
+    <div :class="{'showpanel': showPanel}" style="display: block; height: 51px">
+      <van-goods-action>
+        <van-goods-action-icon icon="chat-o" text="客服" dot @click="$toast('客服页面..')"/>
+        <van-goods-action-icon icon="cart-o" text="购物车" badge="5" @click="$router.push('/cart')"/>
+        <van-goods-action-icon icon="shop-o" text="店铺" badge="12" @click="$toast('店铺页面..')"/>
+        <van-goods-action-button type="warning" text="加入购物车" @click="showSKUPanel(true)"/>
+        <van-goods-action-button type="danger" text="立即购买" @click="showSKUPanel(false)"/>
       </van-goods-action>
     </div>
+
+    <!-- SKU 选中面板 -->
+    <!--
+    quota         限购数，0 表示不限购
+    quota-used    已经购买过的数量
+    hide-stock    是否显示商品剩余库存
+    initial-sku   初始化选中规格定义
+    goods         商品信息
+    goods-id         商品ID
+    -->
+    <van-sku
+      :show-add-cart-btn="showCartBtn"
+      :quota=10
+      :initial-sku="sku['initial-sku']"
+      v-model="showPanel"
+      :sku="sku"
+      :goods="goods"
+      :goods-id="goodsId"
+      :hide-stock="sku.hide_stock"
+      @buy-clicked="onBuyClicked"
+      @add-cart="onAddCartClicked"
+    >
+      <template #sku-body-top>
+        <!--模仿淘宝添加查看评价和配送区域设置-->
+        <div>
+          <van-cell-group :border=false>
+            <van-cell title="查看所有评价" is-link icon="chat-o" @click="$toast('查看所有评论的页面')"/>
+            <van-cell center title="配送区域" is-link label="📍广东省广州市白云区" @click="$toast('选择配送地址页面')"/>
+          </van-cell-group>
+        </div>
+      </template>
+      <template #sku-actions-top>
+        <!--模仿淘宝和京东，添加一行提示文本-->
+        <div style="text-align: center">当前商品可使用xxxx优惠卷购买</div>
+      </template>
+    </van-sku>
   </div>
 </template>
 
@@ -84,21 +120,117 @@ import defaultImg from '@/assets/default-avatar.png'
 export default {
   name: 'ProductDetailPage',
   async created () {
-    const resp = await getProductDetail(this.$route.params.productid)
-    // console.log(resp)
+    // 获取商品详情信息
+    const resp = await getProductDetail(this.goodsId)
+    console.log('商品详情：', resp)
     this.product_detail = resp.data.detail
     this.images = this.product_detail.goods_images
 
     // 获取评价信息
-    const commentResp = await getProComments(this.$route.params.productid, -1, 1)
+    const commentResp = await getProComments(this.goodsId, -1, 1)
     // console.log(commentResp)
     this.comment_data = commentResp.data.list
 
-    const { data: { total } } = await getProCommentsCount(this.$route.params.productid)
+    const { data: { total } } = await getProCommentsCount(this.goodsId)
     this.comment_count = total.all
   },
   data () {
     return {
+      showCartBtn: true,
+      showPanel: false, // 展示加购面板
+      sku: {
+        'initial-sku': {
+          s1: '1',
+          s2: '2',
+          // 初始选中数量(也就是购买数量)
+          selectedNum: 3
+        },
+        // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
+        // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
+        tree: [
+          {
+            k: '颜色', // skuKeyName：规格类目名称
+            k_s: 's1', // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+            v: [
+              {
+                id: '1', // skuValueId：规格值 id
+                name: '红色', // skuValueName：规格值名称
+                imgUrl: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F07bab236-0d84-4003-a779-b93d3e67c174%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1693807215&t=62c5a92aef58073d4a75d39018c066a8', // 规格类目图片，只有第一个规格类目可以定义图片
+                previewImgUrl: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F07bab236-0d84-4003-a779-b93d3e67c174%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1693807215&t=62c5a92aef58073d4a75d39018c066a8' // 用于预览显示的规格类目图片
+              },
+              {
+                id: '2', // skuValueId：规格值 id
+                name: '蓝色', // skuValueName：规格值名称
+                imgUrl: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F1e0466ff-3a60-4544-9630-318439662daf%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1693807215&t=59fe29fa7e4da43f81d8968f44d17821', // 规格类目图片，只有第一个规格类目可以定义图片
+                previewImgUrl: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F1e0466ff-3a60-4544-9630-318439662daf%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1693807215&t=59fe29fa7e4da43f81d8968f44d17821' // 用于预览显示的规格类目图片
+              }
+            ],
+            largeImageMode: false //  是否展示大图模式
+          },
+          {
+            k: '尺寸', // skuKeyName：规格类目名称
+            k_s: 's2', // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+            v: [
+              {
+                id: '1', // skuValueId：规格值 id
+                name: 'XL' // skuValueName：规格值名称
+                // imgUrl: 'https://img01.yzcdn.cn/2.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
+                // previewImgUrl: 'https://img01.yzcdn.cn/2.jpg' // 用于预览显示的规格类目图片
+              },
+              {
+                id: '2', // skuValueId：规格值 id
+                name: 'L', // skuValueName：规格值名称
+                imgUrl2: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fec617d77-b385-4b1d-9b47-eb27fb9089a8%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1693807215&t=2288abe718a9d95ea5119264febdeda3', // 规格类目图片，只有第一个规格类目可以定义图片
+                previewImgUrl2: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fec617d77-b385-4b1d-9b47-eb27fb9089a8%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1693807215&t=2288abe718a9d95ea5119264febdeda3' // 用于预览显示的规格类目图片
+              },
+              {
+                id: '3', // skuValueId：规格值 id
+                name: 'M' // skuValueName：规格值名称
+                // imgUrl: 'https://img01.yzcdn.cn/2.jpg', // 规格类目图片，只有第一个规格类目可以定义图片
+                // previewImgUrl: 'https://img01.yzcdn.cn/2.jpg' // 用于预览显示的规格类目图片
+              }
+            ],
+            largeImageMode: false //  是否展示大图模式
+          }
+        ],
+        // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
+        list: [
+          {
+            id: 2259, // skuId
+            s1: '1', // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: '1', // 规格类目 k_s 为 s2 的对应规格值 id
+            price: 15.98 * 100, // 价格（单位分）
+            stock_num: 110 // 当前 sku 组合对应的库存
+          },
+          {
+            id: 7777, // skuId
+            s1: '1', // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: '2', // 规格类目 k_s 为 s2 的对应规格值 id
+            price: 16.98 * 100, // 价格（单位分）
+            stock_num: 85 // 当前 sku 组合对应的库存
+          },
+          {
+            id: 8888, // skuId
+            s1: '2', // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: '2', // 规格类目 k_s 为 s2 的对应规格值 id
+            price: 20 * 100, // 价格（单位分）
+            stock_num: 10 // 当前 sku 组合对应的库存
+          }
+        ],
+        price: '1.00', // 默认价格（单位元）
+        stock_num: 999, // 商品总库存
+        collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
+        none_sku: false, // 是否无规格商品
+        messages: [],
+        hide_stock: false // 是否隐藏剩余库存
+      },
+      goods: {
+        // 数据结构见下方文档
+        picture: 'https://img01.yzcdn.cn/2.jpg'
+      },
+      messageConfig: {
+        // 数据结构见下方文档
+      },
       defaultImg, // 用户默认头像
       comment_data: '', // 商品评价列表数据
       product_detail: '', // 商品详情数据
@@ -111,6 +243,25 @@ export default {
     // 轮播改变时触发，index为当前页索引
     onChange (index) {
       this.current = index
+    },
+    // 展示SKU选中面板
+    showSKUPanel (showCartBtn) {
+      // console.log(showCartBtn)
+      this.showCartBtn = showCartBtn
+      this.showPanel = true
+    },
+    // 购买按钮，skuData是回调参数
+    onBuyClicked (skuData) {
+      console.log('点击了购买按钮', skuData)
+    },
+    // 加购按钮，skuData是回调参数
+    onAddCartClicked (skuData) {
+      console.log('点击了加购按钮', skuData)
+    }
+  },
+  computed: {
+    goodsId () {
+      return this.$route.params.productid
     }
   }
 }
@@ -121,6 +272,13 @@ export default {
 .van-goods-action {
   padding: 2px 5px 2px 2px;
 }
+
+/* 显示面板的时候将fix的固定高度去掉 */
+.showpanel {
+  //display: none !important;
+  height: 0 !important;
+}
+
 .custom-indicator {
   position: absolute;
   right: 5px;
