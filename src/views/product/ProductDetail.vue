@@ -48,7 +48,7 @@
           <div class="top">
             <img :src="item.user.avatar_url || defaultImg" alt="">
             <div class="name">{{ item.user.nick_name }}</div>
-            <van-rate :size="16" :value="5" color="#ffd21e" void-icon="star" void-color="#eee"/>
+            <van-rate :size="16" :value="item.score / 2" color="#ffd21e" void-icon="star" void-color="#eee"/>
           </div>
           <div class="content">
             {{ item.content }}
