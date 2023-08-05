@@ -37,13 +37,25 @@
           </template>
         </van-swipe-cell>
       </div>
-      <!--底部提交条-->
-      <div ref="submit-bar-outside">
-        <van-submit-bar ref="submit-bar" :price="3050" button-text="结算(5)" @submit="onSubmit">
-          <van-checkbox v-model="checked">全选</van-checkbox>
-        </van-submit-bar>
-      </div>
     </van-pull-refresh>
+    <!--底部提交条-->
+    <div style="display: block; height: 50px">
+      <div class="footer-fixed">
+        <div  class="all-check">
+          <van-checkbox  icon-size="18"></van-checkbox>
+          全选
+        </div>
+
+        <div class="all-total">
+          <div class="price">
+            <span>合计：</span>
+            <span>¥ <i class="totalPrice">99.99</i></span>
+          </div>
+          <div v-if="true" class="goPay">结算(5)</div>
+          <div v-else class="delete">删除</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -103,5 +115,54 @@ export default {
 
 .cart {
   background: #f5f5f5;
+}
+
+.footer-fixed {
+  position: fixed;
+  left: 0;
+  bottom: 50px;
+  height: 50px;
+  width: 100%;
+  border-top: 1px solid #f5f3f3;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+
+  .all-check {
+    display: flex;
+    align-items: center;
+    .van-checkbox {
+      margin-right: 5px;
+    }
+  }
+
+  .all-total {
+    display: flex;
+    line-height: 36px;
+    .price {
+      font-size: 14px;
+      margin-right: 10px;
+      .totalPrice {
+        color: #fa2209;
+        font-size: 18px;
+        font-style: normal;
+      }
+    }
+
+    .goPay, .delete {
+      min-width: 100px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      background-color: #fa2f21;
+      color: #fff;
+      border-radius: 18px;
+      &.disabled {
+        background-color: #ff9779;
+      }
+    }
+  }
 }
 </style>
