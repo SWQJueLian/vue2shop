@@ -60,17 +60,19 @@
       </div>
     </div>
     <!-- 商品描述 -->
-    <div class="desc" style="padding-bottom: 55px">
+    <div class="desc">
       <div v-html="product_detail.content"></div>
     </div>
-
-    <van-goods-action :safe-area-inset-bottom=true>
-      <van-goods-action-icon icon="chat-o" text="客服" dot/>
-      <van-goods-action-icon icon="cart-o" text="购物车" badge="5"/>
-      <van-goods-action-icon icon="shop-o" text="店铺" badge="12"/>
-      <van-goods-action-button type="warning" text="加入购物车"/>
-      <van-goods-action-button type="danger" text="立即购买"/>
-    </van-goods-action>
+    <!-- 包多一层div，解决van-goods-action固定底部时并没有占据原来的高度，导致内容显示补全。-->
+    <div style="display: block; height: 51px">
+      <van-goods-action :safe-area-inset-bottom=true>
+        <van-goods-action-icon icon="chat-o" text="客服" dot/>
+        <van-goods-action-icon icon="cart-o" text="购物车" badge="5"/>
+        <van-goods-action-icon icon="shop-o" text="店铺" badge="12"/>
+        <van-goods-action-button type="warning" text="加入购物车"/>
+        <van-goods-action-button type="danger" text="立即购买"/>
+      </van-goods-action>
+    </div>
   </div>
 </template>
 
@@ -115,6 +117,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/* 追加van-goods-action的样式，修复顶部有badge时内容会溢出一点点的问题、右边距要比左边距大一些，不然不好看。*/
+.van-goods-action {
+  padding: 2px 5px 2px 2px;
+}
 .custom-indicator {
   position: absolute;
   right: 5px;
