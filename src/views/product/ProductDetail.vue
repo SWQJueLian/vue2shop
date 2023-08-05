@@ -116,6 +116,7 @@
 import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/product'
 // eslint-disable-next-line no-unused-vars
 import defaultImg from '@/assets/default-avatar.png'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ProductDetailPage',
@@ -252,17 +253,24 @@ export default {
     },
     // 购买按钮，skuData是回调参数
     onBuyClicked (skuData) {
+      if (!this.isLogin) this.$toast('请先登录')
       console.log('点击了购买按钮', skuData)
     },
     // 加购按钮，skuData是回调参数
     onAddCartClicked (skuData) {
+      /**
+       * 加购实不应该限制必须登录，很多平台都不需要登录，然加购就存储到localstorage中，
+       * 下单的时候让用户直接填手机号地址等信息。如果用户中途登录了就将购物车信息与服务器返回的购物车进行合并操作（之前做python商品也做过）
+       * */
+      if (!this.isLogin) this.$toast('请先登录')
       console.log('点击了加购按钮', skuData)
     }
   },
   computed: {
     goodsId () {
       return this.$route.params.productid
-    }
+    },
+    ...mapGetters('user', ['isLogin'])
   }
 }
 </script>

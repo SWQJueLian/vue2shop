@@ -6,8 +6,12 @@ export default {
     userinfo: getUserInfo() // 先从localstorage中取。
   },
   getters: {
-    value: state => {
-      return state.value
+    // 直接获取是否登录（以token是否为空来判断）
+    isLogin: state => {
+      return state.userinfo.token !== ''
+    },
+    userinfo: state => {
+      return state.userinfo
     }
   },
   mutations: {
