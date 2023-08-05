@@ -6,7 +6,6 @@
       <template #title>
         <van-search
           :clearable="false"
-          :autofocus="true"
           v-model="search_key"
           shape="round"
           placeholder="请输入搜索关键词">
@@ -72,7 +71,7 @@ export default {
         setSearchHistory(this.search_history)
       }
       // 跳转到搜索详情页
-      this.$router.push(`/search_list?searchkey=${key}`)
+      this.$router.replace(`/search_list?searchkey=${key}`)
     }
   }
 }

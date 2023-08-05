@@ -13,9 +13,11 @@
         <template #title>
           <!--
           @focus="$router.push('/search')" # 获取焦点的时候重新进入搜索页，京东和淘宝都是这样的...
+          /home ->
+              /search -> /search-list -> /search -> /search-list
           -->
           <van-search
-            @focus="$router.push('/search')"
+            @focus="handleToRouter"
             :clearable="false"
             v-model="search_key"
             shape="round"
@@ -64,8 +66,13 @@ export default {
   created () {
     // 首次就用默认的规则去搜索
     this.sortSearch()
+    console.log('searchList', this.$router.getRoutes())
   },
   methods: {
+    handleToRouter () {
+      // console.log(this.$router.getRoutes())
+      this.$router.replace('/search')
+    },
     async getSearchKeyProductList (searchrules, loadmore) {
       const { data: { list } } = await getSearchKeyProductList(searchrules)
       if (searchrules.page > 1 && loadmore) {
@@ -118,7 +125,7 @@ export default {
         console.log('firstPrice为', this.firstPrice, 'sort_price设置为0')
         this.sort_price = 0
       } else if (!loadmore) {
-      // if (!loadmore) {
+        // if (!loadmore) {
         this.sort_price = this.sort_price === 0 ? this.sort_price = -1 : this.sort_price = 0
         console.log('非loadmore，firstPrice为', this.firstPrice, `sort_price设置为${this.sort_price}`)
       }
