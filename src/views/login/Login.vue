@@ -102,7 +102,9 @@ export default {
       // this.$store.commit('user/updateUserInfo', data)
       this.updateUserInfo(data) // 因为使用了mapMutations，所以直接用，不需要向上面这样写。
       // 登录成功后跳转到首页
-      this.$router.push('/home')
+      const backurl = this.$route.query.back
+      console.log('回跳url地址：', backurl)
+      this.$router.replace(backurl || '/home')
     },
     // 校验手机号
     validatorMobile (val) {

@@ -251,19 +251,42 @@ export default {
       this.showCartBtn = showCartBtn
       this.showPanel = true
     },
+    showNeedLoginDialog () {
+      // 弹出是否去往登录页面弹窗
+      this.$dialog.confirm({
+        theme: 'round-button',
+        title: '♥温馨提示',
+        message: '该操作需要登录',
+        cancelButtonText: '再逛逛',
+        confirmButtonText: '去登录'
+      })
+        .then(() => {
+          // 将当前的路由url通过back参数传递给/login，方便login页面跳回该页面
+          this.$router.replace(`/login?back=${this.$route.fullPath}`)
+        })
+        .catch(() => {
+          // on cancel
+        })
+    },
     // 购买按钮，skuData是回调参数
     onBuyClicked (skuData) {
-      if (!this.isLogin) this.$toast('请先登录')
-      console.log('点击了购买按钮', skuData)
+      if (!this.isLogin) {
+        this.showNeedLoginDialog()
+      } else {
+        console.log('点击了购买按钮', skuData)
+      }
     },
     // 加购按钮，skuData是回调参数
     onAddCartClicked (skuData) {
       /**
-       * 加购实不应该限制必须登录，很多平台都不需要登录，然加购就存储到localstorage中，
+       * 加购时不应该限制必须登录，很多平台都不需要登录，然加购就存储到localstorage中，
        * 下单的时候让用户直接填手机号地址等信息。如果用户中途登录了就将购物车信息与服务器返回的购物车进行合并操作（之前做python商品也做过）
        * */
-      if (!this.isLogin) this.$toast('请先登录')
-      console.log('点击了加购按钮', skuData)
+      if (!this.isLogin) {
+        this.showNeedLoginDialog()
+      } else {
+        console.log('点击了加购按钮', skuData)
+      }
     }
   },
   computed: {
