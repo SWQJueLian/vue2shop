@@ -67,7 +67,7 @@
     <div :class="{'showpanel': showPanel}" style="display: block; height: 51px">
       <van-goods-action>
         <van-goods-action-icon icon="chat-o" text="客服" dot @click="$toast('客服页面..')"/>
-        <van-goods-action-icon icon="cart-o" text="购物车" badge="5" @click="$router.push('/cart')"/>
+        <van-goods-action-icon icon="cart-o" text="购物车" :badge="cartTotal" @click="$router.push('/cart')"/>
         <van-goods-action-icon icon="shop-o" text="店铺" badge="12" @click="$toast('店铺页面..')"/>
         <van-goods-action-button type="warning" text="加入购物车" @click="showSKUPanel(true)"/>
         <van-goods-action-button type="danger" text="立即购买" @click="showSKUPanel(false)"/>
@@ -117,6 +117,7 @@ import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/pr
 // eslint-disable-next-line no-unused-vars
 import defaultImg from '@/assets/default-avatar.png'
 import { mapGetters } from 'vuex'
+import { addSkuToCart } from '@/apis/cart'
 
 export default {
   name: 'ProductDetailPage',
@@ -269,7 +270,7 @@ export default {
         })
     },
     // 购买按钮，skuData是回调参数
-    onBuyClicked (skuData) {
+    async onBuyClicked (skuData) {
       if (!this.isLogin) {
         this.showNeedLoginDialog()
       } else {
@@ -277,7 +278,7 @@ export default {
       }
     },
     // 加购按钮，skuData是回调参数
-    onAddCartClicked (skuData) {
+    async onAddCartClicked (skuData) {
       /**
        * 加购时不应该限制必须登录，很多平台都不需要登录，然加购就存储到localstorage中，
        * 下单的时候让用户直接填手机号地址等信息。如果用户中途登录了就将购物车信息与服务器返回的购物车进行合并操作（之前做python商品也做过）
@@ -286,6 +287,13 @@ export default {
         this.showNeedLoginDialog()
       } else {
         console.log('点击了加购按钮', skuData)
+        // 由于学习的接口并没有做SKU规格分类，所以这里就拿详情页中的主信息即可
+        // 实际上应该拿skuData.selectedSkuComb.id 拿到就是渲染出来的分类选中的skuid
+        // const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, skuData.selectedSkuComb.id)  //goods_sku_id
+        const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, this.product_detail.skuList[0].goods_sku_id) // 暂时写死为0
+        console.log('addSkuToCart: ', resp)
+        // 更新vuex中的购物车数量
+        this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
       }
     }
   },
@@ -293,7 +301,8 @@ export default {
     goodsId () {
       return this.$route.params.productid
     },
-    ...mapGetters('user', ['isLogin'])
+    ...mapGetters('user', ['isLogin']),
+    ...mapGetters('cart', ['cartTotal'])
   }
 }
 </script>
