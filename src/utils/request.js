@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Toast } from 'vant'
+import store from '@/store'
 
 // 请求基础url
 const baseurl = 'http://cba.itlike.com/public/index.php?s=/api/'
@@ -21,6 +22,9 @@ axiosInstance.interceptors.request.use(function (config) {
     forbidClick: true, // 禁止触摸背景，可以当成节流来使用。
     duration: 20 * 1000 // toast展示最大时长（不要设置成0，无限不就卡死了?）
   })
+  // 统一再请求前添加token
+  config.headers['Access-Token'] = store.state.user.userinfo.token
+  config.headers.platform = 'H5'
   return config
 }, function (error) {
   // 对请求错误做些什么
