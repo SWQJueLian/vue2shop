@@ -67,7 +67,7 @@
     <div :class="{'showpanel': showPanel}" style="display: block; height: 51px">
       <van-goods-action>
         <van-goods-action-icon icon="chat-o" text="客服" dot @click="$toast('客服页面..')"/>
-        <van-goods-action-icon icon="cart-o" text="购物车" :badge="cartTotal" @click="$router.push('/cart')"/>
+        <van-goods-action-icon icon="cart-o" text="购物车" :badge="cartLength" @click="$router.push('/cart')"/>
         <van-goods-action-icon icon="shop-o" text="店铺" badge="12" @click="$toast('店铺页面..')"/>
         <van-goods-action-button type="warning" text="加入购物车" @click="showSKUPanel(true)"/>
         <van-goods-action-button type="danger" text="立即购买" @click="showSKUPanel(false)"/>
@@ -117,7 +117,7 @@ import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/pr
 // eslint-disable-next-line no-unused-vars
 import defaultImg from '@/assets/default-avatar.png'
 import { mapGetters } from 'vuex'
-import { addSkuToCart, getCartList } from '@/apis/cart'
+import { addSkuToCart } from '@/apis/cart'
 
 export default {
   name: 'ProductDetailPage',
@@ -295,9 +295,8 @@ export default {
         // 更新vuex中的购物车数量
         // 接口中的购物车数量不对，返回的是商品数量*商品购买件数。但是京东和淘宝都是返回商品的数量，不需要乘商品的购买件数
         // this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
-        // 所以这里我只能请求获取购物车列表，然后统计购物车的长度来更新购物车数量
-        const { data } = await getCartList()
-        this.$store.commit('cart/updateCartTotal', data.list.length)
+        // 所以这里我就请求获取购物车列表，更新vuex中的数据即可
+        this.$store.dispatch('cart/getCartList')
         // 添加加购成功提示
         this.$toast('加入购物车成功')
         // 加购后就隐藏SKU选择面板
@@ -310,7 +309,7 @@ export default {
       return this.$route.params.productid
     },
     ...mapGetters('user', ['isLogin']),
-    ...mapGetters('cart', ['cartTotal'])
+    ...mapGetters('cart', ['cartLength'])
   }
 }
 </script>

@@ -25,7 +25,7 @@ export const updateCartItem = (goodsId, goodsNum, goodsSkuId) => {
   })
 }
 
-// 购物车商品更新
+// 删除购物车SKU
 export const deleteCartItem = (cartIds) => {
   return request.post('/cart/clear', {
     cartIds

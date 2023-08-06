@@ -5,7 +5,7 @@
     <van-tabbar :placeholder=true v-model="active" active-color="#ee0a24" inactive-color="#000">
       <van-tabbar-item to="/home" name="home" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item to="/category" name="search" icon="apps-o">分类</van-tabbar-item>
-      <van-tabbar-item to="/cart" name="friends" icon="shopping-cart-o" :badge="cartTotal">购物车</van-tabbar-item>
+      <van-tabbar-item to="/cart" name="friends" icon="shopping-cart-o" :badge="cartLength">购物车</van-tabbar-item>
       <van-tabbar-item to="/user" name="setting" icon="user-o">我的</van-tabbar-item>
     </van-tabbar>
   </div>
@@ -22,7 +22,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('cart', ['cartTotal'])
+    ...mapGetters('cart', ['cartLength'])
   }
 }
 </script>
