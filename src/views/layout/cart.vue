@@ -15,7 +15,9 @@
             class="goods-card"
             :thumb="item.goods.goods_image">
             <template #title>
-              <div @click="$router.push(`/prodetail/${item.goods_id}`)" class="text-ellipsis-2 sku-title">{{item.goods.goods_name}}</div>
+              <div @click="$router.push(`/prodetail/${item.goods_id}`)" class="text-ellipsis-2 sku-title">
+                {{ item.goods.goods_name }}
+              </div>
             </template>
             <template #thumb>
               <div class="mythumb">
@@ -71,10 +73,11 @@
         <div class="all-total">
           <div class="price">
             <span>合计：</span>
-            <span>¥ <i class="totalPrice">{{ totalPrice }}</i></span>
+            <span>¥ <i class="totalPrice">{{ toThousands(totalPrice) }}</i></span>
           </div>
-          <div v-if="true" class="goPay">结算({{ cartChoieNum }})</div>
-          <div v-else class="delete">删除</div>
+          <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)">
+            去结算({{ cartChoieNum }})
+          </van-button>
         </div>
       </div>
     </div>
@@ -85,6 +88,7 @@
 import CountBox from '@/components/CountBox.vue'
 import { mapGetters, mapState } from 'vuex'
 import { deleteCartItem } from '@/apis/cart'
+import { toThousands } from '@/utils/tools'
 
 export default {
   name: 'CartPage',
@@ -96,6 +100,7 @@ export default {
     }
   },
   methods: {
+    toThousands,
     // 删除购物项目
     async deleteCartSKU (id) {
       const resp = await deleteCartItem([id])
@@ -164,6 +169,12 @@ export default {
   height: 100%;
 }
 
+.van-button {
+  min-width: 90px;
+  height: 36px;
+  line-height: 36px;
+}
+
 // 价格字体颜色显示红色
 .van-card__price {
   color: red
@@ -207,6 +218,7 @@ export default {
   }
 
   .all-total {
+    align-items: center; // 垂直居中
     display: flex;
     line-height: 36px;
 
