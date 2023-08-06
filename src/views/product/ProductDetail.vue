@@ -117,7 +117,7 @@ import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/pr
 // eslint-disable-next-line no-unused-vars
 import defaultImg from '@/assets/default-avatar.png'
 import { mapGetters } from 'vuex'
-import { addSkuToCart } from '@/apis/cart'
+import { addSkuToCart, getCartList } from '@/apis/cart'
 
 export default {
   name: 'ProductDetailPage',
@@ -293,7 +293,11 @@ export default {
         const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, this.product_detail.skuList[0].goods_sku_id) // 暂时写死为0
         console.log('addSkuToCart: ', resp)
         // 更新vuex中的购物车数量
-        this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
+        // 接口中的购物车数量不对，返回的是商品数量*商品购买件数。但是京东和淘宝都是返回商品的数量，不需要乘商品的购买件数
+        // this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
+        // 所以这里我只能请求获取购物车列表，然后统计购物车的长度来更新购物车数量
+        const { data } = await getCartList()
+        this.$store.commit('cart/updateCartTotal', data.list.length)
         // 添加加购成功提示
         this.$toast('加入购物车成功')
         // 加购后就隐藏SKU选择面板
