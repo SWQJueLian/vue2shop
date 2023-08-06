@@ -1,20 +1,27 @@
 <template>
-  <div class="goods-item" @click="$router.push(`/prodetail/${goods.goods_id}`)">
+  <!--<div class="goods-item" @click="$router.push(`/prodetail/${goods.goods_id}`)">-->
+  <div class="goods-item">
     <div class="left">
       <!--<img :src="goods.goods_image" alt="" />-->
-      <img v-lazy="goods.goods_image" alt="" />
+      <img @click="$router.push(`/prodetail/${goods.goods_id}`)" v-lazy="goods.goods_image" alt="" />
     </div>
     <div class="right">
-      <p class="tit text-ellipsis-2">
+      <p class="tit text-ellipsis-2" @click="$router.push(`/prodetail/${goods.goods_id}`)">
         {{
            goods.goods_name
         }}
       </p>
       <p class="count">已售{{  goods.goods_sales }}件</p>
-      <p class="price">
-        <span class="new">¥{{ goods.goods_price_min }}</span>
-        <span class="old">¥{{ goods.goods_price_max }}</span>
-      </p>
+      <div class="price">
+        <div>
+          <span class="new">¥{{ goods.goods_price_min }}</span>
+          <span class="old">¥{{ goods.goods_price_max }}</span>
+        </div>
+        <div>
+          <van-icon  @click="$toast('点击了收藏')" size="22px"  style="" name="like" />
+          <van-icon @click="$toast('点击了购物车')" size="22px" style="margin-left: 8px" name="cart" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +66,8 @@ export default {
       font-size: 12px;
     }
     .price {
+      display: flex;
+      justify-content: space-between;
       color: #999;
       font-size: 16px;
       .new {
