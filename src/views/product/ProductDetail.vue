@@ -294,6 +294,10 @@ export default {
         console.log('addSkuToCart: ', resp)
         // 更新vuex中的购物车数量
         this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
+        // 添加加购成功提示
+        this.$toast('加入购物车成功')
+        // 加购后就隐藏SKU选择面板
+        this.showPanel = false
       }
     }
   },
