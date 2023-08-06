@@ -14,12 +14,21 @@
             :title="item.goods.goods_name"
             class="goods-card"
             :thumb="item.goods.goods_image">
+            <template #title>
+              <div @click="$router.push(`/prodetail/${item.goods_id}`)" class="text-ellipsis-2 sku-title">{{item.goods.goods_name}}</div>
+            </template>
             <template #thumb>
               <div class="mythumb">
                 <!-- 不能直接用v-model双向绑定 -->
-                <van-checkbox :value="item.isChecked" @click="updateCartCheckBox(item)" icon-size="17"
-                              checked-color="#ee0a24"></van-checkbox>
+                <van-checkbox
+                  :value="item.isChecked"
+                  @click="updateCartCheckBox(item)" icon-size="17"
+                  checked-color="#ee0a24">
+                </van-checkbox>
+
+                <!-- @click="$router.push(`/prodetail/${item.goods_id}`)" 点击商品的头像时候进入商品的详情页-->
                 <van-image
+                  @click="$router.push(`/prodetail/${item.goods_id}`)"
                   style="margin-left: 8px"
                   width="100px"
                   height="100px"
@@ -55,8 +64,8 @@
         <div class="all-check">
           <!-- @click="checkedAll(!isAllChecked)" 直接将是否全部选中的标记位取反就可以实现全选/全不选切换 -->
           <van-checkbox checked-color="#ee0a24" icon-size="18" :value="isAllChecked"
-                        @click="checkedAll(!isAllChecked)"></van-checkbox>
-          全选
+                        @click="checkedAll(!isAllChecked)">全选
+          </van-checkbox>
         </div>
 
         <div class="all-total">
@@ -188,6 +197,7 @@ export default {
   padding: 0 10px;
 
   .all-check {
+    padding-left: 2px;
     display: flex;
     align-items: center;
 
@@ -225,5 +235,10 @@ export default {
       }
     }
   }
+}
+
+.sku-title {
+  //font-weight: bold;
+  font-size: 13px;
 }
 </style>
