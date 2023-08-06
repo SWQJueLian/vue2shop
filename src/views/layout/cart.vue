@@ -1,9 +1,9 @@
 <template>
   <div class="cart">
+    <!-- 顶部导航条-->
+    <van-nav-bar left-arrow title="购物车" fixed placeholder :right-text="isEdit ? '完成': '编辑'" @click-right="editCart"/>
     <van-pull-refresh style="min-height: 100vh;" v-model="isLoading" @refresh="onRefresh">
-      <div style="padding: 6px">
-        <!-- 顶部导航条-->
-        <van-nav-bar title="购物车" fixed placeholder/>
+      <div style="padding: 6px" v-if="cartLength>0">
         <!--商品SKU-->
         <van-swipe-cell v-for="item in cartList" :key="item.id">
           <van-card
@@ -59,9 +59,17 @@
           </template>
         </van-swipe-cell>
       </div>
+
+      <div class="empty-cart" v-else>
+        <img src="@/assets/empty.png" alt="">
+        <div class="tips">
+          您的购物车是空的, 快去逛逛吧
+        </div>
+        <div class="btn" @click="$router.push('/')">去逛逛</div>
+      </div>
     </van-pull-refresh>
     <!--底部提交条-->
-    <div style="display: block; height: 50px">
+    <div style="display: block; height: 50px" v-if="cartLength>0">
       <div class="footer-fixed">
         <div class="all-check">
           <!-- @click="checkedAll(!isAllChecked)" 直接将是否全部选中的标记位取反就可以实现全选/全不选切换 -->
@@ -69,14 +77,16 @@
                         @click="checkedAll(!isAllChecked)">全选
           </van-checkbox>
         </div>
-
         <div class="all-total">
-          <div class="price">
+          <div class="price" v-if="!isEdit">
             <span>合计：</span>
             <span>¥ <i class="totalPrice">{{ toThousands(totalPrice) }}</i></span>
           </div>
-          <van-button round color="linear-gradient(to right, #ff6034, #ee0a24)">
+          <van-button v-if="!isEdit" to="/pay" round color="linear-gradient(to right, #ff6034, #ee0a24)">
             去结算({{ cartChoieNum }})
+          </van-button>
+          <van-button @click="deleteCartSKU" v-else round color="linear-gradient(to right, #ff6034, #ee0a24)">
+            删除({{ cartChoieNum }})
           </van-button>
         </div>
       </div>
@@ -87,7 +97,6 @@
 <script>
 import CountBox from '@/components/CountBox.vue'
 import { mapGetters, mapState } from 'vuex'
-import { deleteCartItem } from '@/apis/cart'
 import { toThousands } from '@/utils/tools'
 
 export default {
@@ -96,16 +105,15 @@ export default {
   data () {
     return {
       // allChecked: false, // 全选 # 从vuex中获取
-      isLoading: false // 下拉刷新控制flag
+      isLoading: false, // 下拉刷新控制flag
+      isEdit: false // 是否处于编辑模式
     }
   },
   methods: {
     toThousands,
     // 删除购物项目
-    async deleteCartSKU (id) {
-      const resp = await deleteCartItem([id])
-      console.log('deleteCartSKU', resp)
-      this.$store.commit('cart/deleteCartItem', { ids: [id] })
+    deleteCartSKU (id) {
+      this.$store.dispatch('cart/deleteCartItem', !this.isEdit ? [id] : this.$store.getters['cart/choiceSKUIDs'])
     },
     // 更新商品数量
     // eslint-disable-next-line camelcase
@@ -129,6 +137,9 @@ export default {
     },
     checkedAll (check) {
       this.$store.commit('cart/checkAll', check)
+    },
+    editCart () {
+      this.isEdit = !this.isEdit
     }
   },
   created () {
@@ -166,7 +177,7 @@ export default {
 }
 
 .swipe-cell-btn {
-  height: 100%;
+  height: 100% !important;
 }
 
 .van-button {
@@ -252,5 +263,34 @@ export default {
 .sku-title {
   //font-weight: bold;
   font-size: 13px;
+}
+
+.empty-cart {
+  padding: 80px 30px;
+
+  img {
+    width: 140px;
+    height: 92px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .tips {
+    text-align: center;
+    color: #666;
+    margin: 30px;
+  }
+
+  .btn {
+    width: 110px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    background-color: #fa2c20;
+    border-radius: 16px;
+    color: #fff;
+    display: block;
+    margin: 0 auto;
+  }
 }
 </style>

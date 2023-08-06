@@ -1,4 +1,4 @@
-import { getCartList, updateCartItem } from '@/apis/cart'
+import { deleteCartItem, getCartList, updateCartItem } from '@/apis/cart'
 
 export default {
   namespaced: true,
@@ -35,6 +35,16 @@ export default {
     // 返回购物车所有商品是否都选中
     isAllChecked: state => {
       return state.cartList.every(item => item.isChecked)
+    },
+    // 返回被选中的SKU ID数组
+    choiceSKUIDs: state => {
+      const ids = []
+      state.cartList.forEach(item => {
+        if (item.isChecked) {
+          ids.push(item.id)
+        }
+      })
+      return ids
     }
   },
   mutations: {
@@ -54,10 +64,10 @@ export default {
       sku.goods_num = payload.goods_num
     },
     // 删除购物车中的某个SKU
-    deleteCartItem (state, payload) {
-      // console.log(payload, 'fuck....')
+    deleteCartItem (state, ids) {
+      console.log(ids, 'fuck....')
       // 只要不在删除的数组中就保留
-      state.cartList = state.cartList.filter(item => !payload.ids.includes(item.id))
+      state.cartList = state.cartList.filter(item => !ids.includes(item.id)) // 删除的购物车ID，不是goods_id
     }
   },
   actions: {
@@ -76,6 +86,13 @@ export default {
       // 发送请求到后台服务器中修改数据
       const resp = await updateCartItem(obj.goods_id, obj.goods_num, obj.goods_sku_id)
       console.log('修改商品数量:', resp)
+    },
+    async deleteCartItem ({ commit }, ids) {
+      // 需要传递一个删除的SKU数组
+      console.log(ids, 'ids现在的值')
+      const resp = await deleteCartItem(ids)
+      console.log(resp, '删除购物车商品返回结果')
+      commit('deleteCartItem', ids)
     }
   }
 }
