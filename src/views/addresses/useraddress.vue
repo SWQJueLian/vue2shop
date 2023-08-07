@@ -54,6 +54,7 @@ export default {
     },
     onEdit (item, index) {
       this.$toast('编辑地址:' + index)
+      this.$router.push(`/useraddressedit?index=${index}`)
     }
   }
 }

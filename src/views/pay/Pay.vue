@@ -1,21 +1,21 @@
 <template>
   <div class="pay">
-    <van-nav-bar fixed title="订单结算台" left-arrow @click-left="$router.go(-1)" />
+    <van-nav-bar fixed title="订单结算台" left-arrow @click-left="$router.go(-1)"/>
 
     <!-- 地址相关 -->
-    <div class="address">
+    <div class="address" @click="$router.push('/useraddress')">
 
       <div class="left-icon">
-        <van-icon name="logistics" />
+        <van-icon name="logistics"/>
       </div>
 
       <div class="info" v-if="true">
         <div class="info-content">
-          <span class="name">小红</span>
-          <span class="mobile">13811112222</span>
+          <span class="name">{{ defaultAddress.name }}</span>
+          <span class="mobile">{{ defaultAddress.phone }}</span>
         </div>
         <div class="info-address">
-          江苏省 无锡市 南长街 110号 504
+          {{ detailAddress }}
         </div>
       </div>
 
@@ -24,7 +24,7 @@
       </div>
 
       <div class="right-icon">
-        <van-icon name="arrow" />
+        <van-icon name="arrow"/>
       </div>
     </div>
 
@@ -33,7 +33,7 @@
       <div class="list">
         <div class="goods-item">
           <div class="left">
-            <img src="http://cba.itlike.com/public/uploads/10001/20230321/8f505c6c437fc3d4b4310b57b1567544.jpg" alt="" />
+            <img src="http://cba.itlike.com/public/uploads/10001/20230321/8f505c6c437fc3d4b4310b57b1567544.jpg" alt=""/>
           </div>
           <div class="right">
             <p class="tit text-ellipsis-2">
@@ -74,9 +74,9 @@
       <div class="pay-way">
         <span class="tit">支付方式</span>
         <div class="pay-cell">
-          <span><van-icon name="balance-o" />余额支付（可用 ¥ 999919.00 元）</span>
+          <span><van-icon name="balance-o"/>余额支付（可用 ¥ 999919.00 元）</span>
           <!-- <span>请先选择配送地址</span> -->
-          <span class="red"><van-icon name="passed" /></span>
+          <span class="red"><van-icon name="passed"/></span>
         </div>
       </div>
 
@@ -95,13 +95,31 @@
 </template>
 
 <script>
+
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'PayIndex',
   data () {
     return {
     }
   },
+  computed: {
+    ...mapGetters('address', ['defaultAddress']),
+    // 计算用户的详情地址
+    detailAddress () {
+      // 将省市区拿出来，然后加上detail就是了
+      const str = Object.values(this.defaultAddress.region)
+      str.push(this.defaultAddress.detail)
+      return str.join(',')
+    }
+  },
   methods: {
+    ...mapActions('address', ['getUserAddressListAndDefaultID'])
+  },
+  async created () {
+    // 进入订单结算时就加载默认用户地址ID和用户地址ID信息
+    await this.getUserAddressListAndDefaultID()
   }
 }
 </script>
@@ -110,12 +128,14 @@ export default {
 .pay {
   padding-top: 46px;
   padding-bottom: 46px;
+
   ::v-deep {
     .van-nav-bar__arrow {
       color: #333;
     }
   }
 }
+
 .address {
   display: flex;
   align-items: center;
@@ -126,30 +146,39 @@ export default {
   position: relative;
   background: url(@/assets/border-line.png) bottom repeat-x;
   background-size: 60px auto;
+
   .left-icon {
     margin-right: 20px;
   }
+
   .right-icon {
     position: absolute;
     right: 20px;
     top: 50%;
     transform: translateY(-7px);
   }
+  .mobile {
+    margin-left: 6px;
+  }
 }
+
 .goods-item {
   height: 100px;
   margin-bottom: 6px;
   padding: 10px;
   background-color: #fff;
   display: flex;
+
   .left {
     width: 100px;
+
     img {
       display: block;
       width: 80px;
       margin: 10px auto;
     }
   }
+
   .right {
     flex: 1;
     font-size: 14px;
@@ -160,10 +189,12 @@ export default {
     flex-direction: column;
     justify-content: space-evenly;
     color: #333;
+
     .info {
       margin-top: 5px;
       display: flex;
       justify-content: space-between;
+
       .price {
         color: #fa2209;
       }
@@ -177,6 +208,7 @@ export default {
   padding: 10px 10px;
   font-size: 14px;
   border-bottom: 1px solid #efefef;
+
   .money {
     color: #fa2209;
   }
@@ -188,10 +220,12 @@ export default {
   color: #333;
   display: flex;
   justify-content: space-between;
+
   .red {
     color: #fa2209;
   }
 }
+
 .pay-detail {
   border-bottom: 1px solid #efefef;
 }
@@ -201,12 +235,15 @@ export default {
   padding: 10px 12px;
   border-bottom: 1px solid #efefef;
   color: #333;
+
   .tit {
     line-height: 30px;
   }
+
   .pay-cell {
     padding: 10px 0;
   }
+
   .van-icon {
     font-size: 20px;
     margin-right: 5px;
@@ -215,6 +252,7 @@ export default {
 
 .buytips {
   display: block;
+
   textarea {
     display: block;
     width: 100%;
@@ -236,17 +274,20 @@ export default {
   border-top: 1px solid #efefef;
   font-size: 14px;
   display: flex;
+
   .left {
     flex: 1;
     padding-left: 12px;
     color: #666;
+
     span {
-      color:#fa2209;
+      color: #fa2209;
     }
   }
+
   .tipsbtn {
     width: 121px;
-    background: linear-gradient(90deg,#f9211c,#ff6335);
+    background: linear-gradient(90deg, #f9211c, #ff6335);
     color: #fff;
     text-align: center;
     line-height: 46px;
