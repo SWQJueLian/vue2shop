@@ -16,13 +16,14 @@
       default-tag-text="默认"
       @add="onAddAddress"
       @edit="onEditAddress"
-      @select="$toast('选中其他的收货地址....')"
+      @select="selectAddress"
     />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { setDefaultAddress } from '@/apis/address'
 
 export default {
   name: 'userAddress',
@@ -46,6 +47,7 @@ export default {
         }
       ],
       */
+      choiceAddressId: '',
       disabledList: [
         {
           id: '3',
@@ -60,6 +62,14 @@ export default {
     this.getUserAddressListAndDefaultID()
   },
   methods: {
+    // item: 地址对象，index: 索引
+    async selectAddress (item, index) {
+      console.log(item)
+      // 正常来讲，后端应该提供修改结算的地址接口的，但是没有，所以这里就直接设置默认地址了。这样的话结算页面会改变显示。
+      // this.choiceAddressId = item.id
+      await setDefaultAddress(item.id)
+      this.$store.commit('address/updateDefaultAddressId', item.id)
+    },
     onAddAddress () {
       // this.$toast('新增地址')
       this.$router.push({
