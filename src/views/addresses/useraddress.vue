@@ -16,7 +16,7 @@
       default-tag-text="默认"
       @add="onAddAddress"
       @edit="onEditAddress"
-      @select="$toast('更改收货地址....')"
+      @select="$toast('选中其他的收货地址....')"
     />
   </div>
 </template>
@@ -61,7 +61,10 @@ export default {
   },
   methods: {
     onAddAddress () {
-      this.$toast('新增地址')
+      // this.$toast('新增地址')
+      this.$router.push({
+        path: '/useraddressedit?mode=add'
+      })
     },
     onEditAddress (item, index) {
       // this.$toast('编辑地址:' + index)

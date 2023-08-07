@@ -9,3 +9,36 @@ export const getAddressList = () => {
 export const getDefaultAddressID = () => {
   return request.get('/address/defaultId')
 }
+
+// 删除收货地址
+export const deleteAddress = (addressId) => {
+  return request.post('/address/remove', {
+    addressId
+  })
+}
+
+// 添加收货地址
+export const addAddress = (name, phone, detail) => {
+  return request.post('/address/add', {
+    form: {
+      name,
+      phone,
+      // 省市区写死了，这个省市区ID不是标准ID，有毒....懒得分析了...
+      region: [
+        {
+          value: 782,
+          label: '上海'
+        },
+        {
+          value: 783,
+          label: '上海市'
+        },
+        {
+          value: 785,
+          label: '徐汇区'
+        }
+      ],
+      detail
+    }
+  })
+}

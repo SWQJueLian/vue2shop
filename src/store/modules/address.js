@@ -1,4 +1,4 @@
-import { getAddressList, getDefaultAddressID } from '@/apis/address'
+import { deleteAddress, getAddressList, getDefaultAddressID } from '@/apis/address'
 
 export default {
   namespaced: true,
@@ -26,6 +26,10 @@ export default {
     },
     updateDefaultAddressId (state, payload) {
       state.defaultAddressId = payload
+    },
+    // 根据地址id删除地址
+    deleteAddressByID (state, payload) {
+      state.userAddressList = state.userAddressList.filter(item => item.address_id === payload)
     }
   },
   actions: {
@@ -44,6 +48,13 @@ export default {
     async getUserAddressListAndDefaultID (context) {
       await context.dispatch('getUserAddressList')
       await context.dispatch('getDefaultAddressId')
+    },
+    // 删除收件地址
+    async deleteAddressByID (context, addressId) {
+      const resp = await deleteAddress(addressId)
+      console.log(resp, '删除用户地址')
+      // 更新vuex中的数据
+      context.commit('deleteAddressByID', addressId)
     }
   }
 }
