@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'LayoutPage',
@@ -23,6 +23,15 @@ export default {
   },
   computed: {
     ...mapGetters('cart', ['cartLength'])
+  },
+  methods: {
+    ...mapActions('cart', ['getCartList'])
+  },
+  created () {
+    // 如果登录了才获取购物车列表
+    if (this.$store.state.user.userinfo.token) {
+      this.$store.dispatch('cart/getCartList')
+    }
   }
 }
 </script>

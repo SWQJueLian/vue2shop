@@ -155,12 +155,14 @@ export default {
     }
   },
   created () {
-    // 如果登录了才获取购物车列表
+    // 进入首页的时候已经获取过购物车了，所以就不需要获取了（嗯...还是获取一下吧）
+    // // 如果登录了才获取购物车列表
     if (this.$store.state.user.userinfo.token) {
       this.$store.dispatch('cart/getCartList')
-    } else {
-      this.$toast('需要登录后才能查看购物车哦！')
     }
+    // } else {
+    //   this.$toast('需要登录后才能查看购物车哦！')
+    // }
     // 获取购物列表
     // const { data } = await getCartList()
     // 设置购物车信息
