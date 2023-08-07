@@ -13,12 +13,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { getActiveBar, setAcitveBar } from '@/utils/stroage'
 
 export default {
   name: 'LayoutPage',
   data () {
     return {
-      active: ''
+      active: getActiveBar()// 默认高亮首页
     }
   },
   computed: {
@@ -31,6 +32,13 @@ export default {
     // 如果登录了才获取购物车列表
     if (this.$store.state.user.userinfo.token) {
       this.$store.dispatch('cart/getCartList')
+    }
+  },
+  watch: {
+    active: {
+      handler (newValue) {
+        setAcitveBar(newValue)
+      }
     }
   }
 }

@@ -33,3 +33,12 @@ export const getSearchHistory = () => {
 export const setSearchHistory = (history) => {
   localStorage.setItem(SEARCH_KEY, JSON.stringify(history))
 }
+
+// 底部状态条高亮index
+export const getActiveBar = () => {
+  return localStorage.getItem('active') || 'home'
+}
+
+export const setAcitveBar = (newValue) => {
+  localStorage.setItem('active', newValue)
+}
