@@ -5,12 +5,16 @@
       left-arrow
       @click-left="$router.back()"
     />
+    <!--
+    :show-set-default="!isAdd" 玛德，添加完又不返回id，你大爷的..谁写得后端，太坑爹了...
+    所以这里只能再编辑的时候才显示’设置位默认地址‘的按钮
+    -->
     <van-address-edit
       :area-list="areaList"
       :address-info="generatorEditData"
       show-postal
       :show-delete="!isAdd"
-      show-set-default
+      :show-set-default="!isAdd"
       :area-columns-placeholder="['请选择', '请选择', '请选择']"
       @save="onSave"
       @delete="onDelete"
@@ -24,7 +28,7 @@
 <script>
 import { areaList } from '@vant/area-data'
 import { mapActions, mapGetters } from 'vuex'
-import { addAddress, editAddress } from '@/apis/address'
+import { addAddress, editAddress, setDefaultAddress } from '@/apis/address'
 
 export default {
   name: 'userAddressEdit',
@@ -46,6 +50,12 @@ export default {
       } else {
         const resp = await editAddress(this.pAddressId, content.name, content.tel, content.addressDetail)
         console.log(resp, '编辑地址：')
+
+        // 判断是否设置了默认地址
+        if (content.isDefault) {
+          const resp = await setDefaultAddress(this.pAddressId)
+          console.log(resp, '设置默认收货地址')
+        }
       }
       // 编辑和添加后就返回地址列表
       this.$router.back()

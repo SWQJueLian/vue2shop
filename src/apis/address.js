@@ -69,3 +69,10 @@ export const editAddress = (addressId, name, phone, detail) => {
     }
   })
 }
+
+// 设置默认收货地址
+export const setDefaultAddress = (addressId) => {
+  return request.post('/address/setDefault', {
+    addressId
+  })
+}
