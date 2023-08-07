@@ -83,7 +83,7 @@
             <span>合计：</span>
             <span>¥ <i class="totalPrice">{{ toThousands(totalPrice) }}</i></span>
           </div>
-          <van-button v-if="!isEdit" to="/pay" round color="linear-gradient(to right, #ff6034, #ee0a24)">
+          <van-button v-if="!isEdit" @click="gotoPay" round color="linear-gradient(to right, #ff6034, #ee0a24)">
             去结算({{ cartChoieNum }})
           </van-button>
           <van-button @click="deleteCartSKU" v-else round color="linear-gradient(to right, #ff6034, #ee0a24)">
@@ -111,6 +111,17 @@ export default {
     }
   },
   methods: {
+    gotoPay () {
+      // 用,拼接购物车id
+      const cartIds = this.$store.getters['cart/choiceSKUIDs'].join(',')
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'cart',
+          cartIds
+        }
+      })
+    },
     toThousands,
     // 删除购物项目
     deleteCartSKU (id) {
