@@ -5,24 +5,31 @@
       left-arrow
       @click-left="$router.back()"
     />
+    <!-- 不能用v-model，你不能去改vuex中的数据... ，改成:value绑定就可以设置默认值
+          v-model="chosenAddressId"  -> :value="defaultAddressId"
+     -->
     <van-address-list
-      v-model="chosenAddressId"
-      :list="list"
+      :value="defaultAddressId"
+      :list="generatorShowListData"
       :disabled-list="disabledList"
       disabled-text="以下地址超出配送范围"
       default-tag-text="默认"
       @add="onAdd"
       @edit="onEdit"
+      @select="$toast('select...')"
     />
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'userAddress',
   data () {
     return {
-      chosenAddressId: '1',
+      /*
+      chosenAddressId: this.defaultAddressId,
       list: [
         {
           id: '1',
@@ -38,6 +45,7 @@ export default {
           address: '浙江省杭州市拱墅区莫干山路 50 号'
         }
       ],
+      */
       disabledList: [
         {
           id: '3',
@@ -48,6 +56,9 @@ export default {
       ]
     }
   },
+  created () {
+    this.getUserAddressListAndDefaultID()
+  },
   methods: {
     onAdd () {
       this.$toast('新增地址')
@@ -55,6 +66,27 @@ export default {
     onEdit (item, index) {
       this.$toast('编辑地址:' + index)
       this.$router.push(`/useraddressedit?index=${index}`)
+    },
+    ...mapActions('address', ['getUserAddressListAndDefaultID'])
+  },
+  computed: {
+    ...mapGetters('address', ['defaultAddressId', 'userAddressList']),
+    // 生成符合vant-ui需要的用户地址数据结构
+    generatorShowListData () {
+      const listArr = []
+      this.userAddressList.forEach(item => {
+        const region = Object.values(item.region)
+        region.push(item.detail)
+        const obj = {
+          id: item.address_id,
+          name: item.name,
+          tel: item.phone,
+          address: region.join(','),
+          isDefault: item.address_id === this.defaultAddressId
+        }
+        listArr.push(obj)
+      })
+      return listArr
     }
   }
 }
