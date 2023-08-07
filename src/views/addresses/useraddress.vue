@@ -14,9 +14,9 @@
       :disabled-list="disabledList"
       disabled-text="以下地址超出配送范围"
       default-tag-text="默认"
-      @add="onAdd"
-      @edit="onEdit"
-      @select="$toast('select...')"
+      @add="onAddAddress"
+      @edit="onEditAddress"
+      @select="$toast('更改收货地址....')"
     />
   </div>
 </template>
@@ -60,12 +60,17 @@ export default {
     this.getUserAddressListAndDefaultID()
   },
   methods: {
-    onAdd () {
+    onAddAddress () {
       this.$toast('新增地址')
     },
-    onEdit (item, index) {
-      this.$toast('编辑地址:' + index)
-      this.$router.push(`/useraddressedit?index=${index}`)
+    onEditAddress (item, index) {
+      // this.$toast('编辑地址:' + index)
+      this.$router.push({
+        path: '/useraddressedit',
+        query: {
+          id: item.id // 选中的addressid然后传递给useraddressedit页面
+        }
+      })
     },
     ...mapActions('address', ['getUserAddressListAndDefaultID'])
   },
@@ -81,7 +86,7 @@ export default {
           id: item.address_id,
           name: item.name,
           tel: item.phone,
-          address: region.join(','),
+          address: region.join(','), // 列表显示的详情地址，包含省市区+detail
           isDefault: item.address_id === this.defaultAddressId
         }
         listArr.push(obj)
