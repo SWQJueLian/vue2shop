@@ -2,12 +2,15 @@ import Vue from 'vue'
 import {
   PullRefresh, Image, Tabs, Icon, Button, Tabbar, TabbarItem, NavBar, Toast, Field, Form, Search, Sticky, Tab,
   Swipe, SwipeItem, Grid, GridItem, DropdownMenu, DropdownItem, GoodsAction, GoodsActionButton, GoodsActionIcon, Rate,
-  List, Lazyload, Sku, Cell, CellGroup, SwipeCell, Card, Checkbox, CheckboxGroup, SubmitBar, Dialog, Tag
+  List, Lazyload, Sku, Cell, CellGroup, SwipeCell, Card, Checkbox, CheckboxGroup, SubmitBar, Dialog, Tag, AddressList,
+  AddressEdit
 } from 'vant'
 
 Vue.use(Lazyload, {
   lazyComponent: true
 })
+Vue.use(AddressList)
+Vue.use(AddressEdit)
 Vue.use(Tag)
 Vue.use(Dialog)
 Vue.use(SubmitBar)

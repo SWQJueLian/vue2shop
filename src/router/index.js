@@ -12,6 +12,8 @@ import ProductDetail from '@/views/product/ProductDetail.vue'
 import SearchList from '@/views/search/SearchList.vue'
 import Search from '@/views/search/Search.vue'
 import store from '@/store'
+import useraddress from '@/views/addresses/useraddress.vue'
+import useraddressedit from '@/views/addresses/useraddressedit.vue'
 
 Vue.use(VueRouter)
 
@@ -36,6 +38,14 @@ const router = new VueRouter({
         }, {
           path: '/cart',
           component: cart
+        },
+        {
+          path: '/useraddress',
+          component: useraddress
+        },
+        {
+          path: '/useraddressedit',
+          component: useraddressedit
         }
       ]
     },
