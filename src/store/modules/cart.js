@@ -59,7 +59,7 @@ export default {
       })
     },
     // 更新SKU的购买数量
-    changeSKUCountUCount (state, payload) {
+    changeSKUCount (state, payload) {
       const sku = state.cartList.find(item => item.goods_id === payload.goods_id)
       sku.goods_num = payload.goods_num
     },
@@ -82,7 +82,7 @@ export default {
     },
     async changeSKUCount (context, obj) {
       // 修改vuex中的数据
-      context.commit('changeSKUCountUCount', obj)
+      context.commit('changeSKUCount', obj)
       // 发送请求到后台服务器中修改数据
       const resp = await updateCartItem(obj.goods_id, obj.goods_num, obj.goods_sku_id)
       console.log('修改商品数量:', resp)

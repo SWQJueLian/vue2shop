@@ -1,7 +1,8 @@
 <template>
   <div class="cart">
     <!-- 顶部导航条-->
-    <van-nav-bar left-arrow title="购物车" fixed placeholder :right-text="isEdit ? '完成': '编辑'" @click-right="editCart"/>
+    <van-nav-bar left-arrow title="购物车" fixed placeholder :right-text="isEdit ? '完成': '编辑'"
+                 @click-right="editCart"/>
     <van-pull-refresh style="min-height: 100vh;" v-model="isLoading" @refresh="onRefresh">
       <div style="padding: 6px" v-if="cartLength>0">
         <!--商品SKU-->
@@ -166,6 +167,7 @@ export default {
     ...mapGetters('cart', ['cartChoieNum', 'cartLength', 'totalPrice', 'isAllChecked'])
   }
 }
+
 </script>
 
 <style lang="less" scoped>
