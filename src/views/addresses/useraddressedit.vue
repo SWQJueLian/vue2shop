@@ -24,7 +24,7 @@
 <script>
 import { areaList } from '@vant/area-data'
 import { mapActions, mapGetters } from 'vuex'
-import { addAddress } from '@/apis/address'
+import { addAddress, editAddress } from '@/apis/address'
 
 export default {
   name: 'userAddressEdit',
@@ -39,9 +39,16 @@ export default {
     async onSave (content) {
       // this.$toast('save')
       // console.log(content)
-      // 添加地址就直接发请求了，没必要操作vuex了
-      const resp = await addAddress(content.name, content.tel, content.addressDetail)
-      console.log(resp, '添加地址：')
+      if (this.isAdd) {
+        // 添加地址就直接发请求了，没必要操作vuex了
+        const resp = await addAddress(content.name, content.tel, content.addressDetail)
+        console.log(resp, '添加地址：')
+      } else {
+        const resp = await editAddress(this.pAddressId, content.name, content.tel, content.addressDetail)
+        console.log(resp, '编辑地址：')
+      }
+      // 编辑和添加后就返回地址列表
+      this.$router.back()
     },
     onDelete (content) {
       // console.log(content.id)

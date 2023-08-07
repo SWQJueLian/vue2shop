@@ -42,3 +42,30 @@ export const addAddress = (name, phone, detail) => {
     }
   })
 }
+
+// 编辑收货地址
+export const editAddress = (addressId, name, phone, detail) => {
+  return request.post('/address/edit', {
+    addressId,
+    form: {
+      name,
+      phone,
+      // 省市区写死了，这个省市区ID不是标准ID，有毒....懒得分析了...
+      region: [
+        {
+          value: 782,
+          label: '上海'
+        },
+        {
+          value: 783,
+          label: '上海市'
+        },
+        {
+          value: 785,
+          label: '徐汇区'
+        }
+      ],
+      detail
+    }
+  })
+}
