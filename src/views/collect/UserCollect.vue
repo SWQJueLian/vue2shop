@@ -13,17 +13,18 @@
     </van-nav-bar>
     <van-tabs v-model="active" sticky>
       <van-tab title="默认">
-        <van-swipe-cell v-for="goods in collectList" :key="goods.goods_id">
-          <van-card
+        <van-swipe-cell v-for="goods in collectList" :key="goods.goods_id" class="goods-card">
+          <van-card style="background-color:#fff;"
             num=""
             :price="goods.goods_price_min"
             desc=""
             :title="goods.goods_name"
-            class="goods-card"
             :thumb="goods.goods_image"
           >
             <template #num>
-              <div>
+              <div style="display: flex; align-items: center">
+                <span @click="$toast('找相似点击')" class="find-other">找相似</span>
+                <span @click="$toast('去店铺点击')" class="find-other">去店铺</span>
                 <van-icon name="cart" @click="handlerAddToCart(goods.goods_id)" size="20px"></van-icon>
               </div>
             </template>
@@ -72,11 +73,7 @@ export default {
 
 <style lang="less" scoped>
 .user-collect {
-  .goods-card {
-    margin: 0;
-    background-color: white;
-  }
-
+  background: #f5f5f5;
   .delete-button {
     height: 100%;
   }
@@ -84,5 +81,22 @@ export default {
   .van-card__price {
     color: red
   }
+  .goods-card {
+    margin: 5px 5px;
+    background-color: white;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+  }
+}
+.van-card__title {
+  font-size: 13px;
+}
+.find-other {
+  color: #333333;
+  margin-right: 5px;
+  font-size: 12px;
+  border: 1px solid #c7c7c7;
+  border-radius: 10px;
+  padding: 0px 5px;
 }
 </style>
