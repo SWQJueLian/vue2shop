@@ -28,7 +28,7 @@
           </van-search>
         </template>
         <template #right>
-          <van-icon class="tool" name="apps-o" size="25"/>
+          <van-icon @click="$router.replace('/category')" class="tool" name="apps-o" size="22"/>
         </template>
       </van-nav-bar>
       <van-tabs v-model="active" @click="wrapperSortSearch" line-width="60">

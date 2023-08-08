@@ -6,7 +6,7 @@
         <van-nav-bar
           :border=false
           @click-left="$router.push('/user')"
-          @click-right="$router.push('/my_message')">
+          @click-right="$toast('聊天页面...')">
           <template #left>
             <van-image round width="30px" height="30px" src="https://img01.yzcdn.cn/vant/cat.jpeg"/>
           </template>
@@ -17,6 +17,7 @@
             </van-tabs>
           </template>
           <template #right>
+            <!-- 聊天页面 -->
             <van-icon color="#333" name="chat-o" size="25" badge="9"/>
           </template>
         </van-nav-bar>
@@ -73,7 +74,7 @@ export default {
   components: { GoodsItem },
   async created () {
     const { data: { pageData } } = await getHomeData()
-    console.log(pageData)
+    // console.log(pageData)
     this.bannerImgList = pageData.items[1].data
     this.gridList = pageData.items[3].data
     this.productList = pageData.items[6].data
@@ -91,7 +92,8 @@ export default {
     onSearch () {
     },
     onTabClick (name, title) {
-      console.log(name, title)
+      this.$toast(`切换到${title}`)
+      // console.log(name, title)
     },
     onRefresh () {
       setTimeout(() => {

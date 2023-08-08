@@ -7,7 +7,7 @@
         <img :src="image.external_url"/>
       </van-swipe-item>
       <template #indicator>
-        <div class="custom-indicator">{{ current + 1 }}/ {{ images.length }}</div>
+        <div class="custom-indicator">{{ current + 1 }} / {{ images.length }}</div>
       </template>
     </van-swipe>
 
@@ -99,8 +99,9 @@
         <!--模仿淘宝添加查看评价和配送区域设置-->
         <div>
           <van-cell-group :border=false>
+            <van-cell title="因后端接口没有SKU规格，所以都写死数据，只是学习SKU面板的使用" is-link icon="chat-o"/>
             <van-cell title="查看所有评价" is-link icon="chat-o" @click="$toast('查看所有评论的页面')"/>
-            <van-cell center title="配送区域" is-link label="📍广东省广州市白云区" @click="$toast('选择配送地址页面')"/>
+            <van-cell center title="配送区域" is-link label="📍广东省广州市白云区" @click="$router.push('/useraddress')"/>
           </van-cell-group>
         </div>
       </template>
