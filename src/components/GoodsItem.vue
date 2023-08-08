@@ -15,11 +15,14 @@
       <div class="price">
         <div>
           <span class="new">¥{{ goods.goods_price_min }}</span>
-          <span class="old">¥{{ goods.goods_price_max }}</span>
+          <div>
+            <span class="old">¥{{ goods.goods_price_max }}</span>
+          </div>
         </div>
-        <div>
+        <div style="margin-right: 5px">
           <van-icon  @click="$toast('点击了收藏')" size="22px"  style="cursor: pointer" name="like" />
-          <van-icon @click="handlerAddToCart" size="22px" style="margin-left: 8px;cursor: pointer" name="cart" />
+          <van-icon  @click="$toast('点击了分享')" name="share" size="22px"  style="margin-left: 10px" />
+          <van-icon @click="handlerAddToCart" size="22px" style="margin-left: 10px;cursor: pointer" name="cart" />
         </div>
       </div>
     </div>
@@ -66,7 +69,7 @@ export default {
     flex: 1;
     font-size: 14px;
     line-height: 1.3;
-    padding: 10px;
+    padding: 0 0 0px 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -79,10 +82,10 @@ export default {
       display: flex;
       justify-content: space-between;
       color: #999;
-      font-size: 16px;
+      font-size: 15px;
       .new {
         color: #f03c3c;
-        margin-right: 10px;
+        margin-right: 5px;
       }
       .old {
         text-decoration: line-through;
