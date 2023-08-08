@@ -1,31 +1,38 @@
 <template>
   <!--<div class="goods-item" @click="$router.push(`/prodetail/${goods.goods_id}`)">-->
-  <div class="goods-item">
-    <div class="left">
-      <!--<img :src="goods.goods_image" alt="" />-->
-      <img @click="$router.push(`/prodetail/${goods.goods_id}`)" v-lazy="goods.goods_image" alt="" />
-    </div>
-    <div class="right">
-      <p class="tit text-ellipsis-2" @click="$router.push(`/prodetail/${goods.goods_id}`)">
-        {{
-           goods.goods_name
-        }}
-      </p>
-      <p class="count">已售{{  goods.goods_sales }}件</p>
-      <div class="price">
-        <div>
-          <span class="new">¥{{ goods.goods_price_min }}</span>
+  <div>
+    <div class="goods-item">
+      <div class="left">
+        <!--<img :src="goods.goods_image" alt="" />-->
+        <img @click="$router.push(`/prodetail/${goods.goods_id}`)" v-lazy="goods.goods_image" alt="" />
+      </div>
+      <div class="right">
+        <p class="tit text-ellipsis-2" @click="$router.push(`/prodetail/${goods.goods_id}`)">
+          {{ goods.goods_name }}
+        </p>
+        <p class="count">已售{{  goods.goods_sales }}件</p>
+        <div class="price">
           <div>
-            <span class="old">¥{{ goods.goods_price_max }}</span>
+            <span class="new">¥{{ goods.goods_price_min }}</span>
+            <div>
+              <span class="old">¥{{ goods.goods_price_max }}</span>
+            </div>
           </div>
-        </div>
-        <div style="margin-right: 5px">
-          <van-icon  @click="$toast('点击了收藏')" size="22px"  style="cursor: pointer" name="like" />
-          <van-icon  @click="$toast('点击了分享')" name="share" size="22px"  style="margin-left: 10px" />
-          <van-icon @click="handlerAddToCart" size="22px" style="margin-left: 10px;cursor: pointer" name="cart" />
+          <div style="margin-right: 5px">
+            <van-icon  @click="$toast('点击了收藏')" size="22px"  style="cursor: pointer" name="like" />
+            <van-icon  @click="handlerShareSKU" name="share" size="22px"  style="margin-left: 10px" />
+            <van-icon @click="handlerAddToCart" size="22px" style="margin-left: 10px;cursor: pointer" name="cart" />
+          </div>
         </div>
       </div>
     </div>
+    <!--分享面板-->
+    <van-share-sheet
+      v-model="showShare"
+      title="立即分享给好友"
+      :options="options"
+      @select="onSelect"
+    />
   </div>
 </template>
 
@@ -33,6 +40,25 @@
 import { addSkuToCart } from '@/apis/cart'
 
 export default {
+  data () {
+    return {
+      showShare: false,
+      options: [
+        [
+          { name: '微信', icon: 'wechat' },
+          { name: '朋友圈', icon: 'wechat-moments' },
+          { name: '微博', icon: 'weibo' },
+          { name: 'QQ', icon: 'qq' }
+        ],
+        [
+          { name: '复制链接', icon: 'link' },
+          { name: '分享海报', icon: 'poster' },
+          { name: '二维码', icon: 'qrcode' },
+          { name: '小程序码', icon: 'weapp-qrcode' }
+        ]
+      ]
+    }
+  },
   props: {
     goods: {
       type: Object,
@@ -45,6 +71,13 @@ export default {
       await addSkuToCart(this.goods.goods_id, 1, '0')
       await this.$store.dispatch('cart/getCartList')
       this.$toast('在购物车等你哦！')
+    },
+    handlerShareSKU () {
+      this.showShare = true
+    },
+    onSelect (option) {
+      this.$toast(option.name)
+      this.showShare = false
     }
   }
 }
