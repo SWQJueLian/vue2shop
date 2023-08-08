@@ -56,6 +56,10 @@
       -->
 
       <div @click="loginSystem" class="login-btn">登录</div>
+      <p style="padding-top: 10px">
+        手机号建议用1322222222，因为后台数据已经设置好了。也可以随便填一个。
+      </p>
+      <p>测试环境短信验证码为：246810</p>
     </div>
   </div>
 </template>
@@ -79,7 +83,7 @@ export default {
       codePic: '', // 图形验证码
       codeKey: '', // 图形验证码key
       code: '', // 用户输入的图形验证码
-      mobile: '', // 用户手机号
+      mobile: '13222222222', // 用户手机号
       smstimer: null,
       totalSecond: 5,
       currentSecond: 5,
@@ -137,7 +141,7 @@ export default {
           }
         }, 1000)
         await getSMSCode(this.code, this.codeKey, this.mobile)
-        this.$toast('获取短信验证码成功！')
+        this.$toast('获取短信验证码成功！测试环境验证码为246810')
       } else {
         console.log('频繁获取短信验证码')
       }
@@ -177,6 +181,7 @@ export default {
   padding: 49px 10px;
 
   .title {
+    margin-left: 10px;
     margin-bottom: 20px;
 
     h3 {
