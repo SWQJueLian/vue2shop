@@ -4,12 +4,11 @@
     <van-nav-bar
       :title="`我的收藏(${collectListLength})`"
       left-arrow
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
+      @click-left="$router.back()"
     >
       <template #right>
-        <van-icon @click="$toast('搜索收藏')" name="search" size="20" />
-        <p style="margin-left: 10px">编辑</p>
+        <van-icon @click="$toast('搜索收藏，逻辑类似，不再实现')" name="search" size="20" />
+        <p @click="$toast('编辑收藏和编辑购物车类似，不再实现')" style="margin-left: 10px">编辑</p>
       </template>
     </van-nav-bar>
     <van-tabs v-model="active" sticky>
