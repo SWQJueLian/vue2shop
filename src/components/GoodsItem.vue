@@ -86,6 +86,7 @@ export default {
       this.addSKUToCollectList(this.goods)
       // 保存到本地
       setCollectList(this.$store.state.collect.collectList)
+      this.$toast('收藏成功！')
     },
     ...mapMutations('collect', ['addSKUToCollectList'])
   }
