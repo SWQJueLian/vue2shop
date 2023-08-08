@@ -8,7 +8,7 @@
     >
       <template #right>
         <van-icon @click="$toast('搜索收藏，逻辑类似，不再实现')" name="search" size="20" />
-        <p @click="$toast('编辑收藏和编辑购物车类似，不再实现')" style="margin-left: 10px">编辑</p>
+        <p @click="$toast('编辑收藏和购物车类似，不再实现。你可以直接向左滑商品使用删除功能')" style="margin-left: 10px">编辑</p>
       </template>
     </van-nav-bar>
     <van-tabs v-model="active" sticky>
