@@ -262,6 +262,18 @@ export default {
         return
       }
       console.log('点击了购买按钮', skuData)
+      const obj = {
+        goodsId: skuData.goodsId,
+        goodsNum: skuData.selectedNum,
+        goodsSkuId: '0' // 后端没有sku规格，所以写死为：'0'
+      }
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          ...obj
+        }
+      })
     },
     // 加购按钮，skuData是回调参数
     async onAddCartClicked (skuData) {

@@ -131,13 +131,13 @@ export default {
       const str = Object.values(this.defaultAddress.region)
       str.push(this.defaultAddress.detail)
       return str.join(',')
-    },
-    cartIds () {
-      return this.$route.query.cartIds
-    },
-    mode () {
-      return this.$route.query.mode
-    }
+    }//,
+    // cartIds () {
+    //   return this.$route.query.cartIds
+    // },
+    // mode () {
+    //   return this.$route.query.mode
+    // }
   },
   methods: {
     ...mapActions('address', ['getUserAddressListAndDefaultID'])
@@ -146,10 +146,11 @@ export default {
     // 进入订单结算时就加载默认用户地址ID和用户地址ID信息
     await this.getUserAddressListAndDefaultID()
     // 获取订单结算数据
-    const { data: { order, personal } } = await checkoutOrder({
-      mode: this.mode, // 需要传递下单的途径
-      cartIds: this.cartIds
-    })
+    // const { data: { order, personal } } = await checkoutOrder({
+    //   mode: this.mode, // 需要传递下单的途径
+    //   cartIds: this.cartIds
+    // })
+    const { data: { order, personal } } = await checkoutOrder(this.$route.query)
     this.order = order
     this.personal = personal
   }
