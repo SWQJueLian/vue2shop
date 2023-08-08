@@ -14,6 +14,7 @@ import Search from '@/views/search/Search.vue'
 import store from '@/store'
 import useraddress from '@/views/addresses/useraddress.vue'
 import useraddressedit from '@/views/addresses/useraddressedit.vue'
+import UserCollect from '@/views/collect/UserCollect.vue'
 
 Vue.use(VueRouter)
 
@@ -72,6 +73,10 @@ const router = new VueRouter({
     {
       path: '/search',
       component: Search
+    },
+    {
+      path: '/usercollect',
+      component: UserCollect
     }
   ]
 })
