@@ -65,19 +65,34 @@
 
         <div class="pay-cell">
           <span>配送费用：</span>
-          <span v-if="!defaultAddress.address_id">请先选择配送地址</span>
+          <span v-if="!defaultAddress">请先选择配送地址</span>
           <span v-else class="red">+￥0.00</span>
         </div>
       </div>
 
       <!-- 支付方式 -->
       <div class="pay-way">
-        <span class="tit">支付方式</span>
-        <div class="pay-cell">
-          <span><van-icon name="balance-o"/>余额支付（可用 ¥ 999919.00 元）</span>
-          <!-- <span>请先选择配送地址</span> -->
-          <span class="red"><van-icon name="passed"/></span>
-        </div>
+        <span class="tit">支付方式：</span>
+        <van-radio-group v-model="radio">
+          <van-cell-group :border="false">
+            <van-cell icon="balance-o" :title="`余额支付（可用 ¥ ${personal.balance} 元）`" clickable @click="radio = '1'">
+              <template #right-icon>
+                <van-radio name="1" />
+              </template>
+            </van-cell>
+            <van-cell icon="alipay" title="支付宝" clickable @click="radio = '2'">
+              <template #right-icon>
+                <van-radio name="2" />
+              </template>
+            </van-cell>
+            <van-cell icon="wechat" title="微信" clickable @click="radio = '3'">
+              <template #right-icon>
+                <van-radio name="3" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+
       </div>
 
       <!-- 买家留言 -->
@@ -104,7 +119,8 @@ export default {
   data () {
     return {
       order: '',
-      personal: ''
+      personal: '',
+      radio: ''
     }
   },
   computed: {
@@ -248,11 +264,11 @@ export default {
 
 .pay-way {
   font-size: 14px;
-  padding: 10px 12px;
   border-bottom: 1px solid #efefef;
   color: #333;
 
   .tit {
+    padding: 10px 12px;
     line-height: 30px;
   }
 
