@@ -296,7 +296,7 @@ export default {
         // 接口中的购物车数量不对，返回的是商品数量*商品购买件数。但是京东和淘宝都是返回商品的数量，不需要乘商品的购买件数
         // this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
         // 所以这里我就请求获取购物车列表，更新vuex中的数据即可
-        this.$store.dispatch('cart/getCartList')
+        await this.$store.dispatch('cart/getCartList')
         // 添加加购成功提示
         this.$toast('加入购物车成功')
         // 加购后就隐藏SKU选择面板
