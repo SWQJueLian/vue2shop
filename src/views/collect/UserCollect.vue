@@ -30,7 +30,7 @@
             </template>
           </van-card>
           <template #right>
-            <van-button square text="删除" type="danger" class="delete-button" />
+            <van-button @click="handlerDeleteCollect(goods.goods_id)" square text="删除" type="danger" class="delete-button" />
           </template>
         </van-swipe-cell>
       </van-tab>
@@ -42,8 +42,9 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { addSkuToCart } from '@/apis/cart'
+import { setCollectList } from '@/utils/stroage'
 
 export default {
   name: 'UserCollect',
@@ -53,11 +54,18 @@ export default {
     ...mapGetters('collect', ['collectListLength'])
   },
   methods: {
+    ...mapMutations('collect', ['deleteCollect']),
     async handlerAddToCart (goodsId) {
       // 这种清空添加商品到购物车都是默认的数量1、默认SKU规格
       await addSkuToCart(goodsId, 1, '0')
       await this.$store.dispatch('cart/getCartList')
       this.$toast('在购物车等你哦！')
+    },
+    handlerDeleteCollect (goodsId) {
+      // 删除vuex中的数据
+      this.deleteCollect(goodsId)
+      // 删除localstorage中的数据(直接设置新的就可以了.)
+      setCollectList(this.collectList)
     }
   }
 }
