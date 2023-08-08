@@ -18,8 +18,8 @@
           <span class="old">¥{{ goods.goods_price_max }}</span>
         </div>
         <div>
-          <van-icon  @click="$toast('点击了收藏')" size="22px"  style="" name="like" />
-          <van-icon @click="$toast('点击了购物车')" size="22px" style="margin-left: 8px" name="cart" />
+          <van-icon  @click="$toast('点击了收藏')" size="22px"  style="cursor: pointer" name="like" />
+          <van-icon @click="handlerAddToCart" size="22px" style="margin-left: 8px;cursor: pointer" name="cart" />
         </div>
       </div>
     </div>
@@ -27,11 +27,21 @@
 </template>
 
 <script>
+import { addSkuToCart } from '@/apis/cart'
+
 export default {
   props: {
     goods: {
       type: Object,
       default: () => { return {} }
+    }
+  },
+  methods: {
+    async handlerAddToCart () {
+      // 这种清空添加商品到购物车都是默认的数量1、默认SKU规格
+      await addSkuToCart(this.goods.goods_id, 1, '0')
+      await this.$store.dispatch('cart/getCartList')
+      this.$toast('在购物车等你哦！')
     }
   }
 }
