@@ -99,6 +99,7 @@
 import CountBox from '@/components/CountBox.vue'
 import { mapGetters, mapState } from 'vuex'
 import { toThousands } from '@/utils/tools'
+import { deleteSKUCheckStatus, setSKUCheckStatus, updateSKUCheckStatus } from '@/utils/stroage'
 
 export default {
   name: 'CartPage',
@@ -140,6 +141,8 @@ export default {
     // 切换选中状态，直接将item丢过来然后修改就可以了
     updateCartCheckBox (item) {
       item.isChecked = !item.isChecked
+      // 更新在localstorage中保存的SKU选中状态
+      updateSKUCheckStatus(item.id, item.isChecked)
     },
     onRefresh () {
       setTimeout(() => {
@@ -149,6 +152,13 @@ export default {
     },
     checkedAll (check) {
       this.$store.commit('cart/checkAll', check)
+      // 更新localstorage中存储的选中状态
+      if (!check) {
+        deleteSKUCheckStatus()
+      } else {
+        // 全选就直接把所有的选中ID一次性添加进去就行了。
+        setSKUCheckStatus(this.choiceSKUIDs)
+      }
     },
     editCart () {
       this.isEdit = !this.isEdit
@@ -177,7 +187,7 @@ export default {
   },
   computed: {
     ...mapState('cart', ['cartList']),
-    ...mapGetters('cart', ['cartChoieNum', 'cartLength', 'totalPrice', 'isAllChecked'])
+    ...mapGetters('cart', ['cartChoieNum', 'cartLength', 'totalPrice', 'isAllChecked', 'choiceSKUIDs'])
   }
 }
 

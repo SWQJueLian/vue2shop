@@ -1,4 +1,5 @@
 import { deleteCartItem, getCartList, updateCartItem } from '@/apis/cart'
+import { getSKUCheckStatus } from '@/utils/stroage'
 
 export default {
   namespaced: true,
@@ -74,10 +75,11 @@ export default {
     async getCartList ({ commit }) {
       // 获取购物车列表，并设置state中的数据
       const { data } = await getCartList()
+      // 获取本地保存的选中状态
+      const status = getSKUCheckStatus()
       data.list.forEach(item => {
-        item.isChecked = true
+        item.isChecked = status.includes(item.id)
       })
-      // 因为返回的数据没有是否勾选状态flag，所以手工为每一项添加一个标志位
       commit('setCartList', data.list)
     },
     async changeSKUCount (context, obj) {

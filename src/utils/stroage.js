@@ -12,7 +12,12 @@ export const saveUserInfo = (userinfo) => {
 export const getUserInfo = () => {
   const userinfo = localStorage.getItem(USERINFO_KEY)
   // 如果localstorage中拿出来的是空，就不能丢去JSON中反序列化，此时返回空对象即可。
-  return userinfo ? JSON.parse(userinfo) : { token: '', userId: '' }
+  return userinfo
+    ? JSON.parse(userinfo)
+    : {
+        token: '',
+        userId: ''
+      }
 }
 
 export const delUserInfo = () => {
@@ -41,4 +46,34 @@ export const getActiveBar = () => {
 
 export const setAcitveBar = (newValue) => {
   localStorage.setItem('active', newValue)
+}
+
+const CART_CHECKED_STATUS = 'shop_cart_checked_status'
+// 获取选中ID列表
+export const getSKUCheckStatus = () => {
+  return localStorage.getItem(CART_CHECKED_STATUS) || []
+}
+// 保存购物车选中状态（后端竟然不给是否选中....）
+export const updateSKUCheckStatus = (skuID, isAdd) => {
+  const status = localStorage.getItem(CART_CHECKED_STATUS)
+  // 转为集合
+  const obj = new Set(status ? JSON.parse(status) : [])
+  if (isAdd) {
+    // 添加id进去
+    obj.add(skuID)
+  } else {
+    obj.delete(skuID)
+  }
+  console.log(obj)
+  // 转回数组存储在localstorage
+  localStorage.setItem(CART_CHECKED_STATUS, JSON.stringify([...obj]))
+}
+
+export const setSKUCheckStatus = (skuIDs) => {
+  // 转回数组存储在localstorage
+  localStorage.setItem(CART_CHECKED_STATUS, JSON.stringify(skuIDs))
+}
+
+export const deleteSKUCheckStatus = () => {
+  localStorage.removeItem(CART_CHECKED_STATUS)
 }
