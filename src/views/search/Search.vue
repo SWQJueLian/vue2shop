@@ -5,6 +5,7 @@
     >
       <template #title>
         <van-search
+          @search="searchProduct(search_key)"
           :clearable="false"
           v-model="search_key"
           shape="round"
