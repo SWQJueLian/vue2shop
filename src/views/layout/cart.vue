@@ -1,9 +1,9 @@
 <template>
   <div class="cart">
-    <!-- 顶部导航条-->
-    <van-nav-bar left-arrow title="购物车" fixed placeholder :right-text="isEdit ? '完成': '编辑'"
-                 @click-right="editCart"/>
     <van-pull-refresh style="min-height: 100vh;" v-model="isLoading" @refresh="onRefresh">
+      <!-- 顶部导航条-->
+      <van-nav-bar left-arrow title="购物车" fixed placeholder :right-text="isEdit ? '完成': '编辑'"
+                   @click-right="editCart"/>
       <div style="padding: 6px" v-if="cartLength>0">
         <!--商品SKU-->
         <van-swipe-cell v-for="item in cartList" :key="item.id">
@@ -68,30 +68,30 @@
         </div>
         <div class="btn" @click="$router.push('/')">去逛逛</div>
       </div>
-    </van-pull-refresh>
-    <!--底部提交条-->
-    <div style="display: block; height: 50px" v-if="cartLength>0">
-      <div class="footer-fixed">
-        <div class="all-check">
-          <!-- @click="checkedAll(!isAllChecked)" 直接将是否全部选中的标记位取反就可以实现全选/全不选切换 -->
-          <van-checkbox checked-color="#ee0a24" icon-size="18" :value="isAllChecked"
-                        @click="checkedAll(!isAllChecked)">全选
-          </van-checkbox>
-        </div>
-        <div class="all-total">
-          <div class="price" v-if="!isEdit">
-            <span>合计：</span>
-            <span>¥ <i class="totalPrice">{{ toThousands(totalPrice) }}</i></span>
+      <!--底部提交条-->
+      <div style="display: block; height: 50px" v-if="cartLength>0">
+        <div class="footer-fixed">
+          <div class="all-check">
+            <!-- @click="checkedAll(!isAllChecked)" 直接将是否全部选中的标记位取反就可以实现全选/全不选切换 -->
+            <van-checkbox checked-color="#ee0a24" icon-size="18" :value="isAllChecked"
+                          @click="checkedAll(!isAllChecked)">全选
+            </van-checkbox>
           </div>
-          <van-button v-if="!isEdit" @click="gotoPay" round color="linear-gradient(to right, #ff6034, #ee0a24)">
-            去结算({{ cartChoieNum }})
-          </van-button>
-          <van-button @click="deleteCartSKU" v-else round color="linear-gradient(to right, #ff6034, #ee0a24)">
-            删除({{ cartChoieNum }})
-          </van-button>
+          <div class="all-total">
+            <div class="price" v-if="!isEdit">
+              <span>合计：</span>
+              <span>¥ <i class="totalPrice">{{ toThousands(totalPrice) }}</i></span>
+            </div>
+            <van-button v-if="!isEdit" @click="gotoPay" round color="linear-gradient(to right, #ff6034, #ee0a24)">
+              去结算({{ cartChoieNum }})
+            </van-button>
+            <van-button @click="deleteCartSKU" v-else round color="linear-gradient(to right, #ff6034, #ee0a24)">
+              删除({{ cartChoieNum }})
+            </van-button>
+          </div>
         </div>
       </div>
-    </div>
+    </van-pull-refresh>
   </div>
 </template>
 
