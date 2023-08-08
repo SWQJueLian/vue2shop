@@ -77,3 +77,16 @@ export const setSKUCheckStatus = (skuIDs) => {
 export const deleteSKUCheckStatus = () => {
   localStorage.removeItem(CART_CHECKED_STATUS)
 }
+
+// 用户收藏商品（本地保存，因为后端没有接口，纯粹练习）
+const COLLECT_KEY = 'shop_collect_list'
+
+export const getCollectList = () => {
+  const list = localStorage.getItem(COLLECT_KEY)
+  return list ? JSON.parse(list) : []
+}
+
+// 设置用户收藏列表
+export const setCollectList = (list) => {
+  localStorage.setItem(COLLECT_KEY, JSON.stringify(list))
+}

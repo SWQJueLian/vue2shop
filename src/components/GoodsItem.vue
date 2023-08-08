@@ -19,7 +19,7 @@
             </div>
           </div>
           <div style="margin-right: 5px">
-            <van-icon  @click="$toast('点击了收藏')" size="22px"  style="cursor: pointer" name="like" />
+            <van-icon  @click="handlerCollectSKU" size="22px"  style="cursor: pointer" name="like" />
             <van-icon  @click="handlerShareSKU" name="share" size="22px"  style="margin-left: 10px" />
             <van-icon @click="handlerAddToCart" size="22px" style="margin-left: 10px;cursor: pointer" name="cart" />
           </div>
@@ -38,6 +38,8 @@
 
 <script>
 import { addSkuToCart } from '@/apis/cart'
+import { mapMutations } from 'vuex'
+import { setCollectList } from '@/utils/stroage'
 
 export default {
   data () {
@@ -78,7 +80,14 @@ export default {
     onSelect (option) {
       this.$toast(option.name)
       this.showShare = false
-    }
+    },
+    handlerCollectSKU () {
+      // 将收藏添加到vuex中记录
+      this.addSKUToCollectList(this.goods)
+      // 保存到本地
+      setCollectList(this.$store.state.collect.collectList)
+    },
+    ...mapMutations('collect', ['addSKUToCollectList'])
   }
 }
 </script>

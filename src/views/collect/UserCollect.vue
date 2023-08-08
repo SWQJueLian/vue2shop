@@ -36,9 +36,15 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'UserCollect',
-  active: ''
+  active: '',
+  computed: {
+    ...mapState('collect', ['collectList']),
+    ...mapGetters('collect', ['collectListLength'])
+  }
 }
 </script>
 
