@@ -40,8 +40,10 @@
 import { addSkuToCart } from '@/apis/cart'
 import { mapMutations } from 'vuex'
 import { setCollectList } from '@/utils/stroage'
+import showNeedLoginDialog from '@/mixins/loginConfirmDialog'
 
 export default {
+  mixins: [showNeedLoginDialog],
   data () {
     return {
       showShare: false,
@@ -69,6 +71,9 @@ export default {
   },
   methods: {
     async handlerAddToCart () {
+      if (this.showNeedLoginDialog()) {
+        return
+      }
       // 这种清空添加商品到购物车都是默认的数量1、默认SKU规格
       await addSkuToCart(this.goods.goods_id, 1, '0')
       await this.$store.dispatch('cart/getCartList')

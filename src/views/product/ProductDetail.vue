@@ -101,7 +101,8 @@
           <van-cell-group :border=false>
             <van-cell title="因后端接口没有SKU规格，所以都写死数据，只是学习SKU面板的使用" is-link icon="chat-o"/>
             <van-cell title="查看所有评价" is-link icon="chat-o" @click="$toast('查看所有评论的页面')"/>
-            <van-cell center title="配送区域" is-link label="📍广东省广州市白云区" @click="$router.push('/useraddress')"/>
+            <van-cell center title="配送区域" is-link label="📍广东省广州市白云区"
+                      @click="$router.push('/useraddress')"/>
           </van-cell-group>
         </div>
       </template>
@@ -119,9 +120,11 @@ import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/pr
 import defaultImg from '@/assets/default-avatar.png'
 import { mapGetters } from 'vuex'
 import { addSkuToCart } from '@/apis/cart'
+import showNeedLoginDialog from '@/mixins/loginConfirmDialog'
 
 export default {
   name: 'ProductDetailPage',
+  mixins: [showNeedLoginDialog],
   async created () {
     // 获取商品详情信息
     const resp = await getProductDetail(this.goodsId)
@@ -253,30 +256,12 @@ export default {
       this.showCartBtn = showCartBtn
       this.showPanel = true
     },
-    showNeedLoginDialog () {
-      // 弹出是否去往登录页面弹窗
-      this.$dialog.confirm({
-        theme: 'round-button',
-        title: '♥温馨提示',
-        message: '该操作需要登录',
-        cancelButtonText: '再逛逛',
-        confirmButtonText: '去登录'
-      })
-        .then(() => {
-          // 将当前的路由url通过back参数传递给/login，方便login页面跳回该页面
-          this.$router.replace(`/login?back=${this.$route.fullPath}`)
-        })
-        .catch(() => {
-          // on cancel
-        })
-    },
     // 购买按钮，skuData是回调参数
     async onBuyClicked (skuData) {
-      if (!this.isLogin) {
-        this.showNeedLoginDialog()
-      } else {
-        console.log('点击了购买按钮', skuData)
+      if (this.showNeedLoginDialog()) {
+        return
       }
+      console.log('点击了购买按钮', skuData)
     },
     // 加购按钮，skuData是回调参数
     async onAddCartClicked (skuData) {
@@ -284,25 +269,24 @@ export default {
        * 加购时不应该限制必须登录，很多平台都不需要登录，然加购就存储到localstorage中，
        * 下单的时候让用户直接填手机号地址等信息。如果用户中途登录了就将购物车信息与服务器返回的购物车进行合并操作（之前做python商品也做过）
        * */
-      if (!this.isLogin) {
-        this.showNeedLoginDialog()
-      } else {
-        console.log('点击了加购按钮', skuData)
-        // 由于学习的接口并没有做SKU规格分类，所以这里就拿详情页中的主信息即可
-        // 实际上应该拿skuData.selectedSkuComb.id 拿到就是渲染出来的分类选中的skuid
-        // const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, skuData.selectedSkuComb.id)  //goods_sku_id
-        const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, this.product_detail.skuList[0].goods_sku_id) // 暂时写死为0
-        console.log('addSkuToCart: ', resp)
-        // 更新vuex中的购物车数量
-        // 接口中的购物车数量不对，返回的是商品数量*商品购买件数。但是京东和淘宝都是返回商品的数量，不需要乘商品的购买件数
-        // this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
-        // 所以这里我就请求获取购物车列表，更新vuex中的数据即可
-        await this.$store.dispatch('cart/getCartList')
-        // 添加加购成功提示
-        this.$toast('加入购物车成功')
-        // 加购后就隐藏SKU选择面板
-        this.showPanel = false
+      if (this.showNeedLoginDialog()) {
+        return
       }
+      console.log('点击了加购按钮', skuData)
+      // 由于学习的接口并没有做SKU规格分类，所以这里就拿详情页中的主信息即可
+      // 实际上应该拿skuData.selectedSkuComb.id 拿到就是渲染出来的分类选中的skuid
+      // const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, skuData.selectedSkuComb.id)  //goods_sku_id
+      const resp = await addSkuToCart(this.goodsId, skuData.selectedNum, this.product_detail.skuList[0].goods_sku_id) // 暂时写死为0
+      console.log('addSkuToCart: ', resp)
+      // 更新vuex中的购物车数量
+      // 接口中的购物车数量不对，返回的是商品数量*商品购买件数。但是京东和淘宝都是返回商品的数量，不需要乘商品的购买件数
+      // this.$store.commit('cart/updateCartTotal', resp.data.cartTotal)
+      // 所以这里我就请求获取购物车列表，更新vuex中的数据即可
+      await this.$store.dispatch('cart/getCartList')
+      // 添加加购成功提示
+      this.$toast('加入购物车成功')
+      // 加购后就隐藏SKU选择面板
+      this.showPanel = false
     }
   },
   computed: {

@@ -45,9 +45,11 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { addSkuToCart } from '@/apis/cart'
 import { setCollectList } from '@/utils/stroage'
+import showNeedLoginDialog from '@/mixins/loginConfirmDialog'
 
 export default {
   name: 'UserCollect',
+  mixins: [showNeedLoginDialog],
   active: '',
   computed: {
     ...mapState('collect', ['collectList']),
@@ -56,6 +58,9 @@ export default {
   methods: {
     ...mapMutations('collect', ['deleteCollect']),
     async handlerAddToCart (goodsId) {
+      if (this.showNeedLoginDialog()) {
+        return
+      }
       // 这种清空添加商品到购物车都是默认的数量1、默认SKU规格
       await addSkuToCart(goodsId, 1, '0')
       await this.$store.dispatch('cart/getCartList')
