@@ -41,7 +41,7 @@
             </p>
             <p class="info">
               <span class="count">x{{ item.total_num }}</span>
-              <span class="price">¥{{ item.total_pay_price }}</span>
+              <span class="price">¥{{ item.goods_price }}</span>
             </p>
           </div>
         </div>
