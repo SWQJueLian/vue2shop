@@ -8,7 +8,7 @@
           @click-left="$router.push('/user')"
           @click-right="$toast('聊天页面...')">
           <template #left>
-            <van-image round width="30px" height="30px" src="https://img01.yzcdn.cn/vant/cat.jpeg"/>
+            <van-image fit="cover" round width="32px" height="32px" src="https://img01.yzcdn.cn/vant/cat.jpeg"/>
           </template>
           <template #title>
             <van-tabs @click="onTabClick" line-width="30px">
