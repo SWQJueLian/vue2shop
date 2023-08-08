@@ -2,7 +2,7 @@
   <div class="user-collect">
     <!-- 顶部导航条 -->
     <van-nav-bar
-      title="我的收藏(100)"
+      :title="`我的收藏(${collectListLength})`"
       left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
@@ -14,15 +14,21 @@
     </van-nav-bar>
     <van-tabs v-model="active" sticky>
       <van-tab title="默认">
-        <van-swipe-cell v-for="index in 8" :key="index">
+        <van-swipe-cell v-for="goods in collectList" :key="goods.goods_id">
           <van-card
-            num="2"
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
+            num=""
+            :price="goods.goods_price_min"
+            desc=""
+            :title="goods.goods_name"
             class="goods-card"
-            thumb="https://img01.yzcdn.cn/vant/cat.jpeg"
-          />
+            :thumb="goods.goods_image"
+          >
+            <template #num>
+              <div>
+                <van-icon name="cart" @click="handlerAddToCart(goods.goods_id)" size="20px"></van-icon>
+              </div>
+            </template>
+          </van-card>
           <template #right>
             <van-button square text="删除" type="danger" class="delete-button" />
           </template>
@@ -37,6 +43,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import { addSkuToCart } from '@/apis/cart'
 
 export default {
   name: 'UserCollect',
@@ -44,6 +51,14 @@ export default {
   computed: {
     ...mapState('collect', ['collectList']),
     ...mapGetters('collect', ['collectListLength'])
+  },
+  methods: {
+    async handlerAddToCart (goodsId) {
+      // 这种清空添加商品到购物车都是默认的数量1、默认SKU规格
+      await addSkuToCart(goodsId, 1, '0')
+      await this.$store.dispatch('cart/getCartList')
+      this.$toast('在购物车等你哦！')
+    }
   }
 }
 </script>
@@ -57,6 +72,10 @@ export default {
 
   .delete-button {
     height: 100%;
+  }
+  // 价格字体颜色显示红色
+  .van-card__price {
+    color: red
   }
 }
 </style>
