@@ -55,7 +55,7 @@
           </van-card>
           <!--自定义右滑动的内容-->
           <template #right>
-            <van-button @click="$toast('点击了收藏')" square type="primary" text="收藏" class="swipe-cell-btn"/>
+            <van-button @click="handlerAddToCollect(item.goods)" square type="primary" text="收藏" class="swipe-cell-btn"/>
             <van-button @click="deleteCartSKU(item.id)" square text="删除" type="danger" class="swipe-cell-btn"/>
           </template>
         </van-swipe-cell>
@@ -99,7 +99,7 @@
 import CountBox from '@/components/CountBox.vue'
 import { mapGetters, mapState } from 'vuex'
 import { toThousands } from '@/utils/tools'
-import { deleteSKUCheckStatus, setSKUCheckStatus, updateSKUCheckStatus } from '@/utils/stroage'
+import { deleteSKUCheckStatus, setCollectList, setSKUCheckStatus, updateSKUCheckStatus } from '@/utils/stroage'
 
 export default {
   name: 'CartPage',
@@ -162,6 +162,12 @@ export default {
     },
     editCart () {
       this.isEdit = !this.isEdit
+    },
+    handlerAddToCollect (item) {
+      this.$store.commit('collect/addSKUToCollectList', item)
+      // 保存到本地
+      setCollectList(this.$store.state.collect.collectList)
+      this.$toast('收藏成功！')
     }
   },
   created () {
