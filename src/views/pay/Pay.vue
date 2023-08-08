@@ -120,7 +120,7 @@ export default {
     return {
       order: '',
       personal: '',
-      radio: ''
+      radio: '1'
     }
   },
   computed: {
