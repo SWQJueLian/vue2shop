@@ -51,19 +51,19 @@
     </div>
     <div class="order-navbar">
       <div class="order-navbar-item" @click="$router.push('/order?dataType=all')">
-        <van-icon name="balance-list-o" />
+        <van-icon name="balance-list-o" :badge="orderTotal" />
         <span>全部订单</span>
       </div>
       <div class="order-navbar-item" @click="$router.push('/order?dataType=payment')">
-        <van-icon name="clock-o" />
+        <van-icon name="clock-o" :badge="orderTodoCount.payment" />
         <span>待支付</span>
       </div>
       <div class="order-navbar-item" @click="$router.push('/order?dataType=delivery')">
-        <van-icon name="logistics" />
+        <van-icon name="logistics" :badge="orderTodoCount.delivery" />
         <span>待发货</span>
       </div>
       <div class="order-navbar-item" @click="$router.push('/order?dataType=received')">
-        <van-icon name="send-gift-o" />
+        <van-icon name="send-gift-o" :badge="orderTodoCount.received" />
         <span>待收货</span>
       </div>
     </div>
@@ -109,18 +109,22 @@
 </template>
 
 <script>
-import { getUserInfo } from '@/apis/users'
+import { getOrderTodoCount, getUserInfo } from '@/apis/users'
+import { getOrderList } from '@/apis/order'
 
 export default {
   name: 'UserPage',
   data () {
     return {
-      detail: {}
+      detail: {},
+      orderTodoCount: {},
+      orderTotal: 0
     }
   },
   created () {
     if (this.isLogin) {
       this.getUserInfoDetail()
+      this.initOrderData()
     }
   },
   computed: {
@@ -129,10 +133,20 @@ export default {
     }
   },
   methods: {
+    // 后端返回的数据没有全部订单的数量，只能获取全部订单然后拿到订单数量了....
+    async initOrderData () {
+      // 订单类型，all-全部，payment-待支付，delivery-待发货，received-待收货，comment-待评价
+      const resp = await getOrderList('all', 1)
+      // console.log(resp, '订单列表')
+      this.orderTotal = resp.data.list.total
+    },
     async getUserInfoDetail () {
       const { data: { userInfo } } = await getUserInfo()
       this.detail = userInfo
-      console.log(this.detail)
+      // console.log(this.detail)
+      // 获商品状态数量
+      const resp = await getOrderTodoCount()
+      this.orderTodoCount = resp.data.counts
     },
     handlerLogout () {
       this.$dialog.confirm({
