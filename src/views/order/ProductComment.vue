@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     handerComment (goodsId, orderGoodsId) {
+      // 别人提供的api接口没有任何解析，只能猜测这两个是唯一性的判断，所以传递这两个数据到评价页面中
       this.$router.push(`/procomment-detail?goods_id=${goodsId}&order_goods_id=${orderGoodsId}`)
     }
   },
