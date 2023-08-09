@@ -11,6 +11,10 @@
         <p @click="$toast('编辑收藏和购物车类似，不再实现。你可以直接向左滑商品使用删除功能')" style="margin-left: 10px">编辑</p>
       </template>
     </van-nav-bar>
+    <van-notice-bar
+      left-icon="volume-o"
+      text="我的收藏数据只存储在本地，因为后端没有接口提供"
+    />
     <van-tabs v-model="active" sticky>
       <van-tab title="默认">
         <van-swipe-cell v-for="goods in collectList" :key="goods.goods_id" class="goods-card">
