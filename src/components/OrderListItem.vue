@@ -3,7 +3,7 @@
     <div class="tit">
       <div class="time">{{ order.create_time }}</div>
       <div class="status">
-        <span>{{ order.state_text }}</span>
+        <span>{{ order.state_text === '待取消' ? '已取消' : order.state_text }}</span>
       </div>
     </div>
     <div class="list">
@@ -29,7 +29,7 @@
     </div>
     <div class="actions">
       <span v-if="order.state_text === '待付款'">立刻付款</span>
-      <span v-if="showCancelBtn()">申请取消</span>
+      <span v-if="showCancelBtn()" @click="handlerCancelOrder(order.order_id)">申请取消</span>
       <span v-if="order.state_text === '待收货'">确认收货</span>
       <span v-if="order.state_text === '已完成'">评价</span>
       <span class="highlight">加入购物车</span>
@@ -38,6 +38,9 @@
 </template>
 
 <script>
+import { cancelOrder } from '@/apis/order'
+import { Notify } from 'vant'
+
 export default {
   props: {
     order: {
@@ -54,9 +57,19 @@ export default {
   methods: {
     // 判断是否应该展示申请取消按钮
     showCancelBtn () {
-      if (this.order.state_text !== '已取消' && this.order.state_text !== '已完成') {
+      // 有毒...取消了还是显示待取消，后端返回数据不正确....
+      // if (this.order.state_text !== '已取消' && this.order.state_text !== '已完成') {
+      if (this.order.state_text !== '待取消' && this.order.state_text !== '已完成') {
         return true
       }
+    },
+    async handlerCancelOrder (orderId) {
+      const resp = await cancelOrder(orderId)
+      // console.log(resp, '取消订单')
+      // 弹出消息
+      Notify({ type: 'success', message: resp.message })
+      // 通知父组件更新订单列表数据
+      this.$emit('updateOrderList')
     }
   }
 }

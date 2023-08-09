@@ -57,7 +57,7 @@ export const getOrderDetail = (orderId) => {
 
 // 取消订单
 export const cancelOrder = (orderId) => {
-  return request.get('/order/cancel', {
+  return request.post('/order/cancel', {
     orderId
   })
 }
