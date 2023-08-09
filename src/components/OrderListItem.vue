@@ -11,23 +11,28 @@
         <div class="goods-img">
           <img :src="item.goods_image" alt="">
         </div>
-        <div class="goods-content text-ellipsis-2">
-          {{ item.goods_name }}
+        <div class="goods-content">
+          <div class="text-ellipsis-2" >
+            {{ item.goods_name }}
+          </div>
+          <van-tag style="margin-right: 5px" plain type="danger">假一赔十</van-tag>
+          <van-tag style="margin-right: 5px" plain type="danger">运费险</van-tag>
         </div>
         <div class="goods-trade">
-          <p>¥ {{ item.goods_price }}</p>
+          <p style="color: #333">¥ {{ item.goods_price }}</p>
           <p>x {{ item.total_num }}</p>
         </div>
       </div>
     </div>
     <div class="total">
-      共{{ totalNum }}件商品，总金额 ¥{{ order.total_price }}
+      共{{ totalNum }}件，实付款 ¥{{ order.total_price }}
     </div>
     <div class="actions">
       <span v-if="order.state_text === '待付款'">立刻付款</span>
       <span v-if="showCancelBtn()">申请取消</span>
       <span v-if="order.state_text === '待收货'">确认收货</span>
       <span v-if="order.state_text === '已完成'">评价</span>
+      <span class="highlight">加入购物车</span>
     </div>
   </div>
 </template>
@@ -110,17 +115,24 @@ export default {
   }
   .actions {
     text-align: right;
+    .highlight {
+      color: #fa2209;
+      border: 0.5px solid #fa2209;
+    }
     span {
+      text-align: center;
+      min-width: 65px;
       display: inline-block;
       height: 28px;
       line-height: 28px;
       color: #383838;
       border: 0.5px solid #a8a8a8;
       font-size: 14px;
-      padding: 0 15px;
-      border-radius: 5px;
-      margin: 10px 0;
+      padding: 0 5px;
+      border-radius: 18px;
+      margin: 10px 5px;
     }
   }
 }
+
 </style>
