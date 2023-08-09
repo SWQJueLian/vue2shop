@@ -32,7 +32,7 @@
       <span v-if="showCancelBtn()" @click="handlerCancelOrder(order.order_id)">申请取消</span>
       <span v-if="order.state_text === '待收货'" @click="handlerConfirmOrder(order.order_id)">确认收货</span>
       <span v-if="order.state_text === '已完成'">评价</span>
-      <span class="highlight">加入购物车</span>
+      <span class="highlight" @click="handlerAddOrderToCart()">加入购物车</span>
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@
 <script>
 import { cancelOrder, confirmOrder } from '@/apis/order'
 import { Notify } from 'vant'
+import { addSkuToCart } from '@/apis/cart'
 
 export default {
   props: {
@@ -78,6 +79,12 @@ export default {
       Notify({ type: 'success', message: resp.message })
       // 通知父组件更新订单列表数据
       this.$emit('updateOrderList')
+    },
+    handlerAddOrderToCart () {
+      // 由于没有批量添加的后端接口，所以只能遍历然后一个个加了...实际开发肯定不会这样的...煞笔吧...
+      this.order.goods.forEach(async item => {
+        await addSkuToCart(item.goods_id, item.total_num, item.goods_sku_id)
+      })
     }
   }
 }
