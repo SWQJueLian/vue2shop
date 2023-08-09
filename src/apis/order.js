@@ -35,3 +35,24 @@ export const submitOrder = (params) => {
     isUsePoints: 0 // 是否使用积分
   })
 }
+
+// 我的订单
+export const getOrderList = () => {
+  return request.get('/order/list')
+}
+
+// 获取订单详情
+export const getOrderDetail = (orderId) => {
+  return request.get('/order/detail', {
+    params: {
+      orderId
+    }
+  })
+}
+
+// 取消订单
+export const cancelOrder = (orderId) => {
+  return request.get('/order/cancel', {
+    orderId
+  })
+}
