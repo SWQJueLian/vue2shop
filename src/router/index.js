@@ -16,6 +16,7 @@ import useraddress from '@/views/addresses/useraddress.vue'
 import useraddressedit from '@/views/addresses/useraddressedit.vue'
 import UserCollect from '@/views/collect/UserCollect.vue'
 import ProductComment from '@/views/order/ProductComment.vue'
+import ProductCommentDetail from '@/views/order/ProductCommentDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -82,6 +83,10 @@ const router = new VueRouter({
     {
       path: '/productcomment',
       component: ProductComment
+    },
+    {
+      path: '/procomment-detail',
+      component: ProductCommentDetail
     }
   ]
 })

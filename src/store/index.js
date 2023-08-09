@@ -4,6 +4,7 @@ import user from '@/store/modules/user'
 import cart from '@/store/modules/cart'
 import address from '@/store/modules/address'
 import collect from '@/store/modules/collect'
+import comment from '@/store/modules/comment'
 
 Vue.use(Vuex)
 
@@ -17,6 +18,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    user, cart, address, collect
+    user, cart, address, collect, comment
   }
 })

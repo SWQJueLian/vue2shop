@@ -29,3 +29,22 @@ export const getProCommentsCount = (goodsId) => {
     }
   })
 }
+
+// 商品评价
+export const submitComment = (orderId, objArr) => {
+  return request.post('/order.comment/submit', {
+    orderId,
+    form: objArr
+  })
+}
+
+// 上传评价图片
+export const uploadImage = (fileObj) => {
+  const fromData = new FormData()
+  fromData.append('file', fileObj)
+  return request.post('/upload/image', fromData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}

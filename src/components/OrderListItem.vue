@@ -31,7 +31,7 @@
       <span v-if="order.state_text === '待付款'">立刻付款</span>
       <span v-if="showCancelBtn()" @click="handlerCancelOrder(order.order_id)">申请取消</span>
       <span v-if="order.state_text === '待收货'" @click="handlerConfirmOrder(order.order_id)">确认收货</span>
-      <span v-if="order.state_text === '已完成'">评价</span>
+      <span v-if="order.state_text === '已完成'" @click="handlerComment">评价</span>
       <span class="highlight" @click="handlerAddOrderToCart()">加入购物车</span>
     </div>
   </div>
@@ -64,6 +64,7 @@ export default {
         return true
       }
     },
+    // 取消订单
     async handlerCancelOrder (orderId) {
       const resp = await cancelOrder(orderId)
       // console.log(resp, '取消订单')
@@ -72,6 +73,7 @@ export default {
       // 通知父组件更新订单列表数据
       this.$emit('updateOrderList')
     },
+    // 确认收货
     async handlerConfirmOrder (orderId) {
       const resp = await confirmOrder(orderId)
       // console.log(resp, '取消订单')
@@ -80,11 +82,18 @@ export default {
       // 通知父组件更新订单列表数据
       this.$emit('updateOrderList')
     },
+    // 将订单中的商品重新加入到购物车
     handlerAddOrderToCart () {
       // 由于没有批量添加的后端接口，所以只能遍历然后一个个加了...实际开发肯定不会这样的...煞笔吧...
       this.order.goods.forEach(async item => {
         await addSkuToCart(item.goods_id, item.total_num, item.goods_sku_id)
       })
+    },
+    handlerComment () {
+      // 将需要评价的商品信息对象临时存入vuex中
+      this.$store.commit('comment/setCommentGoods', this.order)
+      // 跳转到评价页面
+      this.$router.push('/productcomment')
     }
   }
 }
