@@ -103,7 +103,7 @@
     </div>
 
     <div class="logout-btn">
-      <button>退出登录</button>
+      <button @click="handlerLogout">退出登录</button>
     </div>
   </div>
 </template>
@@ -133,6 +133,27 @@ export default {
       const { data: { userInfo } } = await getUserInfo()
       this.detail = userInfo
       console.log(this.detail)
+    },
+    handlerLogout () {
+      this.$dialog.confirm({
+        title: '退出',
+        message: '您确定要退出吗？',
+        theme: 'round-button'
+      })
+        .then(() => {
+          // 1. 发送请求到后端登出
+          // 没有接口， 发个锤子
+          // 2、清除vuex中的数据
+          this.$store.commit('user/updateUserInfo', {})
+          // 清除购物车
+          this.$store.commit('address/updateUserAddressList', [])
+          // 清除收藏
+          // 这里就不清除了，因为收藏本身就是用localstorage实现的....为了方便测试。
+          this.detail = {}
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }
