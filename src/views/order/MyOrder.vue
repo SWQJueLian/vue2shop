@@ -8,8 +8,8 @@
       <van-tab name="received" title="待收货"></van-tab>
       <van-tab name="comment" title="待评价"></van-tab>
     </van-tabs>
-
-    <OrderListItem v-for="(item) in orderDataList" :key="item.order_id" :order="item" @updateOrderList="switchTab"></OrderListItem>
+    <van-empty v-if="orderDataList.length<=0" description="空空如也~" />
+    <OrderListItem v-else v-for="(item) in orderDataList" :key="item.order_id" :order="item" @updateOrderList="switchTab"></OrderListItem>
   </div>
 </template>
 

@@ -17,7 +17,8 @@
     />
     <van-tabs v-model="active" sticky>
       <van-tab title="默认">
-        <van-swipe-cell v-for="goods in collectList" :key="goods.goods_id" class="goods-card">
+        <van-empty v-if="collectList.length<=0" description="空空如也~" />
+        <van-swipe-cell v-else v-for="goods in collectList" :key="goods.goods_id" class="goods-card">
           <van-card style="background-color:#fff;"
             num=""
             :price="goods.goods_price_min"
