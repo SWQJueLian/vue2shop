@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  console.log('超时时间：', config.timeout)
+  // console.log('超时时间：', config.timeout)
   // 请求前统一添加toast提示
   Toast.loading({
     message: '请求中...',

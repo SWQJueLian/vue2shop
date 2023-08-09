@@ -120,7 +120,8 @@ export default {
         path: '/pay',
         query: {
           mode: 'cart',
-          cartIds
+          cartIds,
+          backUrl: this.$route.fullPath // 传递backurl
         }
       })
     },

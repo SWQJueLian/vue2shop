@@ -23,3 +23,15 @@ export const checkoutOrder = (queryParam) => {
     }
   })
 }
+
+// 提交订单
+export const submitOrder = (params) => {
+  return request.post('/checkout/submit', {
+    ...params,
+    // mode, // 模式，立即购买-> buyNow, 购物车-> cart
+    payType: 10, // 支付方式
+    delivery: 10, // 快递方式
+    couponId: 0, // 优惠卷ID
+    isUsePoints: 0 // 是否使用积分
+  })
+}

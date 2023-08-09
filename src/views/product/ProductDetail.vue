@@ -271,7 +271,8 @@ export default {
         path: '/pay',
         query: {
           mode: 'buyNow',
-          ...obj
+          ...obj,
+          backUrl: this.$route.fullPath // 传递backUrl
         }
       })
     },

@@ -75,19 +75,20 @@
         <span class="tit">支付方式：</span>
         <van-radio-group v-model="radio">
           <van-cell-group :border="false">
-            <van-cell icon="balance-o" :title="`余额支付（可用 ¥ ${personal.balance} 元）`" clickable @click="radio = '1'">
+            <van-cell icon="balance-o" :title="`余额支付（可用 ¥ ${personal.balance} 元）`" clickable
+                      @click="radio = '1'">
               <template #right-icon>
-                <van-radio name="1" />
+                <van-radio name="1"/>
               </template>
             </van-cell>
             <van-cell icon="alipay" title="支付宝" clickable @click="radio = '2'">
               <template #right-icon>
-                <van-radio name="2" />
+                <van-radio name="2"/>
               </template>
             </van-cell>
             <van-cell icon="wechat" title="微信" clickable @click="radio = '3'">
               <template #right-icon>
-                <van-radio name="3" />
+                <van-radio name="3"/>
               </template>
             </van-cell>
           </van-cell-group>
@@ -97,14 +98,14 @@
 
       <!-- 买家留言 -->
       <div class="buytips">
-        <textarea placeholder="选填：买家留言（50字内）" name="" id="" cols="30" rows="10"></textarea>
+        <textarea v-model="remark" placeholder="选填：买家留言（50字内）" name="" id="" cols="30" rows="10"></textarea>
       </div>
     </div>
 
     <!-- 底部提交 -->
     <div class="footer-fixed">
       <div class="left">实付款：<span>￥{{ order.orderPayPrice }}</span></div>
-      <div class="tipsbtn">提交订单</div>
+      <div class="tipsbtn" @click="handlerSubmitOrder">提交订单</div>
     </div>
   </div>
 </template>
@@ -112,15 +113,17 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex'
-import { checkoutOrder } from '@/apis/order'
+import { checkoutOrder, submitOrder } from '@/apis/order'
+import { Notify } from 'vant'
 
 export default {
   name: 'PayIndex',
   data () {
     return {
-      order: '',
-      personal: '',
-      radio: '1'
+      order: '', // 订单结算数据
+      personal: '', // 个人数据
+      radio: '1', // 支付方式
+      remark: '' // 买家留言
     }
   },
   computed: {
@@ -131,16 +134,31 @@ export default {
       const str = Object.values(this.defaultAddress.region)
       str.push(this.defaultAddress.detail)
       return str.join(',')
-    }//,
+    },
     // cartIds () {
     //   return this.$route.query.cartIds
     // },
     // mode () {
     //   return this.$route.query.mode
     // }
+    backUrl () {
+      return this.$route.query.backUrl
+    }
   },
   methods: {
-    ...mapActions('address', ['getUserAddressListAndDefaultID'])
+    ...mapActions('address', ['getUserAddressListAndDefaultID']),
+    async handlerSubmitOrder () {
+      const resp = await submitOrder(this.$route.query)
+      Notify({ type: 'success', message: '订单提交成功' })
+      if (resp.data && resp.message === 'success') {
+        // 如有又backurl，则返回到原来的url中，否则跳转到订单页面
+        if (this.backUrl) {
+          this.$router.replace(this.backUrl)
+        } else {
+          this.$router.replace('/order')
+        }
+      }
+    }
   },
   async created () {
     // 进入订单结算时就加载默认用户地址ID和用户地址ID信息
@@ -150,7 +168,12 @@ export default {
     //   mode: this.mode, // 需要传递下单的途径
     //   cartIds: this.cartIds
     // })
-    const { data: { order, personal } } = await checkoutOrder(this.$route.query)
+    const {
+      data: {
+        order,
+        personal
+      }
+    } = await checkoutOrder(this.$route.query)
     this.order = order
     this.personal = personal
   }
