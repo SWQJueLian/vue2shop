@@ -1,5 +1,9 @@
 <template>
   <div class="user">
+    <van-notice-bar
+      left-icon="volume-o"
+      text="该页面只实现订单查看、收货地址、我的收藏、退出登录功能，其他的没有接口可以实现。"
+    />
     <div class="head-page" v-if="isLogin">
       <div class="head-img">
         <img src="@/assets/default-avatar.png" alt="" />
@@ -67,27 +71,31 @@
     <div class="service">
       <div class="title">我的服务</div>
       <div class="content">
-        <div class="content-item">
+        <div class="content-item" @click="$router.push('/useraddress')">
           <van-icon name="records" />
           <span>收货地址</span>
         </div>
-        <div class="content-item">
+        <div class="content-item" @click="$router.push('/usercollect')">
+          <van-icon name="goods-collect-o" />
+          <span>我的收藏</span>
+        </div>
+        <div class="content-item" @click="$toast('未实现')">
           <van-icon name="gift-o" />
           <span>领券中心</span>
         </div>
-        <div class="content-item">
+        <div class="content-item" @click="$toast('未实现')">
           <van-icon name="gift-card-o" />
           <span>优惠券</span>
         </div>
-        <div class="content-item">
+        <div class="content-item" @click="$toast('未实现')">
           <van-icon name="question-o" />
           <span>我的帮助</span>
         </div>
-        <div class="content-item">
+        <div class="content-item" @click="$toast('未实现')">
           <van-icon name="balance-o" />
           <span>我的积分</span>
         </div>
-        <div class="content-item">
+        <div class="content-item" @click="$toast('未实现')">
           <van-icon name="refund-o" />
           <span>退换/售后</span>
         </div>
@@ -184,7 +192,7 @@ export default {
   background-color: #fff;
   .asset-left {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around; // 效果比space-evenly好
     flex: 3;
     .asset-left-item {
       display: flex;
