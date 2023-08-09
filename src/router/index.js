@@ -5,18 +5,20 @@ import home from '@/views/layout/home.vue'
 import category from '@/views/layout/category.vue'
 import usercenter from '@/views/layout/usercenter.vue'
 import cart from '@/views/layout/cart.vue'
-import login from '@/views/login/Login.vue'
-import pay from '@/views/pay/Pay.vue'
-import myOrder from '@/views/order/MyOrder.vue'
-import ProductDetail from '@/views/product/ProductDetail.vue'
-import SearchList from '@/views/search/SearchList.vue'
-import Search from '@/views/search/Search.vue'
 import store from '@/store'
-import useraddress from '@/views/addresses/useraddress.vue'
-import useraddressedit from '@/views/addresses/useraddressedit.vue'
-import UserCollect from '@/views/collect/UserCollect.vue'
-import ProductComment from '@/views/order/ProductComment.vue'
-import ProductCommentDetail from '@/views/order/ProductCommentDetail.vue'
+
+// 路由懒加载
+const login = () => import('@/views/login/Login.vue')
+const pay = () => import('@/views/pay/Pay.vue')
+const myOrder = () => import('@/views/order/MyOrder.vue')
+const ProductDetail = () => import('@/views/product/ProductDetail.vue')
+const SearchList = () => import('@/views/search/SearchList.vue')
+const Search = () => import('@/views/search/Search.vue')
+const useraddress = () => import('@/views/addresses/useraddress.vue')
+const useraddressedit = () => import('@/views/addresses/useraddressedit.vue')
+const UserCollect = () => import('@/views/collect/UserCollect.vue')
+const ProductComment = () => import('@/views/order/ProductComment.vue')
+const ProductCommentDetail = () => import('@/views/order/ProductCommentDetail.vue')
 
 Vue.use(VueRouter)
 
