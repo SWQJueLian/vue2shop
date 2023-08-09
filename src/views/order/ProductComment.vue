@@ -1,35 +1,28 @@
 <template>
-  <div class="comment-sku">
+  <div class="user-collect">
     <van-nav-bar
+      placeholder
+      fixed
       title="评价商品"
       left-text="返回"
       left-arrow
       @click-left="$router.back()"
     />
-    <div class="main">
-      <div class="comment-sku-item" v-for="item in commentGoods.goods" :key="item.order_goods_id">
-        <!--商品信息-->
-        <div class="goods-info">
-          <div class="goods-img">
-            <img :src="item.goods_image" alt="">
-          </div>
-          <div class="goods-content">
-            <div class="text-ellipsis-2">
-              {{ item.goods_name }}
-            </div>
-            <div style="display: flex; flex-direction: row-reverse">
-              <div style="margin-right: 10px;margin-bottom: 10px">
-                <span @click="handerComment(item.goods_id, item.order_goods_id)" style="border: 1px solid #fa2c20;border-radius: 18px;padding: 3px 10px;color: #fa2c20">
-                  评价
-                </span>
-              </div>
-            </div>
-          </div>
+    <van-card
+      v-for="item in commentGoods.goods" :key="item.order_goods_id"
+      style="background-color:#fff;"
+      num=""
+      :price="item.goods_price"
+      desc=""
+      :title="item.goods_name"
+      :thumb="item.goods_image"
+    >
+      <template #num>
+        <div style="display: flex; align-items: center">
+          <span @click="handerComment(item.goods_id, item.order_goods_id)" class="find-other">评价</span>
         </div>
-        <!--分割线-->
-        <div class="van-hairline--bottom"></div>
-      </div>
-    </div>
+      </template>
+    </van-card>
   </div>
 </template>
 
@@ -39,8 +32,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ProductComment',
   data () {
-    return {
-    }
+    return {}
   },
   methods: {
     handerComment (goodsId, orderGoodsId) {
@@ -55,32 +47,43 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.goods-img {
-  width: 80px;
-  height: 80px;
-  margin: 0px 10px 10px 0;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
 .goods-content {
   flex: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.goods-info {
-  display: flex;
-}
-.main {
-  padding: 0px 10px;
-}
-.rate {
-  padding-left: 10px;
-}
 .van-cell {
   padding-left: 10px;
   padding-right: 10px;
+}
+.user-collect {
+  background: #f5f5f5;
+  .delete-button {
+    height: 100%;
+  }
+  // 价格字体颜色显示红色
+  .van-card__price {
+    color: red
+  }
+  .goods-card {
+    margin: 5px 5px;
+    background-color: white;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+  }
+}
+.van-card__title {
+  font-size: 13px;
+}
+.find-other {
+  height: 23px;
+  line-height: 23px;
+  color: #f03c3c;
+  margin-right: 5px;
+  font-size: 12px;
+  border: 1px solid #fa2209;
+  border-radius: 18px;
+  padding: 0px 10px;
 }
 </style>
