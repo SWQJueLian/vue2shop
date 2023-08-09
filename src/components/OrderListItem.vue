@@ -30,7 +30,7 @@
     <div class="actions">
       <span v-if="order.state_text === '待付款'">立刻付款</span>
       <span v-if="showCancelBtn()" @click="handlerCancelOrder(order.order_id)">申请取消</span>
-      <span v-if="order.state_text === '待收货'">确认收货</span>
+      <span v-if="order.state_text === '待收货'" @click="handlerConfirmOrder(order.order_id)">确认收货</span>
       <span v-if="order.state_text === '已完成'">评价</span>
       <span class="highlight">加入购物车</span>
     </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { cancelOrder } from '@/apis/order'
+import { cancelOrder, confirmOrder } from '@/apis/order'
 import { Notify } from 'vant'
 
 export default {
@@ -65,6 +65,14 @@ export default {
     },
     async handlerCancelOrder (orderId) {
       const resp = await cancelOrder(orderId)
+      // console.log(resp, '取消订单')
+      // 弹出消息
+      Notify({ type: 'success', message: resp.message })
+      // 通知父组件更新订单列表数据
+      this.$emit('updateOrderList')
+    },
+    async handlerConfirmOrder (orderId) {
+      const resp = await confirmOrder(orderId)
       // console.log(resp, '取消订单')
       // 弹出消息
       Notify({ type: 'success', message: resp.message })

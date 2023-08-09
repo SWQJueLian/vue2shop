@@ -61,3 +61,9 @@ export const cancelOrder = (orderId) => {
     orderId
   })
 }
+
+export const confirmOrder = (orderId) => {
+  return request.post('/order/receipt', {
+    orderId
+  })
+}
