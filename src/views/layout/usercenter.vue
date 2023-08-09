@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div v-else class="head-page" @click="$router.push('/login')">
+    <div v-else class="head-page" @click="$router.replace(`/login?back=${$route.fullPath}`)">
       <div class="head-img">
         <img src="@/assets/default-avatar.png" alt="" />
       </div>
@@ -30,7 +30,7 @@
     <div class="my-asset">
       <div class="asset-left">
         <div class="asset-left-item">
-          <span>{{ detail.pay_money || 0 }}</span>
+          <span>{{ detail.balance || 0 }}</span>
           <span>账户余额</span>
         </div>
         <div class="asset-left-item">
