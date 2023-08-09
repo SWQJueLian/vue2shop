@@ -37,13 +37,13 @@
           <span>0</span>
           <span>积分</span>
         </div>
-        <div class="asset-left-item">
+        <div class="asset-left-item" @click="$toast('优惠卷页面')">
           <span>0</span>
           <span>优惠券</span>
         </div>
       </div>
       <div class="asset-right">
-        <div class="asset-right-item">
+        <div class="asset-right-item" @click="$toast('我的钱包...')">
           <van-icon name="balance-pay" />
           <span>我的钱包</span>
         </div>
@@ -79,23 +79,23 @@
           <van-icon name="goods-collect-o" />
           <span>我的收藏</span>
         </div>
-        <div class="content-item" @click="$toast('未实现')">
+        <div class="content-item" @click="$toast('领卷中心')">
           <van-icon name="gift-o" />
           <span>领券中心</span>
         </div>
-        <div class="content-item" @click="$toast('未实现')">
+        <div class="content-item" @click="$toast('优惠卷页面')">
           <van-icon name="gift-card-o" />
           <span>优惠券</span>
         </div>
-        <div class="content-item" @click="$toast('未实现')">
+        <div class="content-item" @click="$toast('帮助信息')">
           <van-icon name="question-o" />
           <span>我的帮助</span>
         </div>
-        <div class="content-item" @click="$toast('未实现')">
+        <div class="content-item" @click="$toast('我的积分')">
           <van-icon name="balance-o" />
           <span>我的积分</span>
         </div>
-        <div class="content-item" @click="$toast('未实现')">
+        <div class="content-item" @click="$toast('售后')">
           <van-icon name="refund-o" />
           <span>退换/售后</span>
         </div>
