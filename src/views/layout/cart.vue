@@ -36,6 +36,7 @@
 
               <!-- @click="$router.push(`/prodetail/${item.goods_id}`)" 点击商品的头像时候进入商品的详情页-->
               <van-image
+                lazy-load
                 @click="$router.push(`/prodetail/${item.goods_id}`)"
                 style="margin-left: 8px"
                 width="100px"
