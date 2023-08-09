@@ -1,64 +1,59 @@
 <template>
   <div class="order-list-item">
     <div class="tit">
-      <div class="time">2023-07-01 12:02:13</div>
+      <div class="time">{{ order.create_time }}</div>
       <div class="status">
-        <span>待支付</span>
+        <span>{{ order.state_text }}</span>
       </div>
     </div>
     <div class="list">
-      <div class="list-item">
+      <div class="list-item" v-for="item in order.goods" :key="item.goods_id">
         <div class="goods-img">
-          <img src="http://cba.itlike.com/public/uploads/10001/20230321/c4b5c61e46489bb9b9c0630002fbd69e.jpg" alt="">
+          <img :src="item.goods_image" alt="">
         </div>
         <div class="goods-content text-ellipsis-2">
-          Apple iPhone 14 Pro Max 256G 银色 移动联通电信5G双卡双待手机
+          {{ item.goods_name }}
         </div>
         <div class="goods-trade">
-          <p>¥ 1299.00</p>
-          <p>x 3</p>
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="goods-img">
-          <img src="http://cba.itlike.com/public/uploads/10001/20230321/c4b5c61e46489bb9b9c0630002fbd69e.jpg" alt="">
-        </div>
-        <div class="goods-content text-ellipsis-2">
-          Apple iPhone 14 Pro Max 256G 银色 移动联通电信5G双卡双待手机
-        </div>
-        <div class="goods-trade">
-          <p>¥ 1299.00</p>
-          <p>x 3</p>
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="goods-img">
-          <img src="http://cba.itlike.com/public/uploads/10001/20230321/c4b5c61e46489bb9b9c0630002fbd69e.jpg" alt="">
-        </div>
-        <div class="goods-content text-ellipsis-2">
-          Apple iPhone 14 Pro Max 256G 银色 移动联通电信5G双卡双待手机
-        </div>
-        <div class="goods-trade">
-          <p>¥ 1299.00</p>
-          <p>x 3</p>
+          <p>¥ {{ item.goods_price }}</p>
+          <p>x {{ item.total_num }}</p>
         </div>
       </div>
     </div>
     <div class="total">
-      共12件商品，总金额 ¥29888.00
+      共{{ totalNum }}件商品，总金额 ¥{{ order.total_price }}
     </div>
     <div class="actions">
-      <span v-if="false">立刻付款</span>
-      <span v-if="true">申请取消</span>
-      <span v-if="false">确认收货</span>
-      <span v-if="false">评价</span>
+      <span v-if="order.state_text === '待付款'">立刻付款</span>
+      <span v-if="showCancelBtn()">申请取消</span>
+      <span v-if="order.state_text === '待收货'">确认收货</span>
+      <span v-if="order.state_text === '已完成'">评价</span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    order: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    // 后端返回没有总数，所以自己计算
+    totalNum () {
+      return this.order.goods.reduce((sum, item) => sum + item.total_num, 0)
+    }
+  },
+  methods: {
+    // 判断是否应该展示申请取消按钮
+    showCancelBtn () {
+      if (this.order.state_text !== '已取消' && this.order.state_text !== '已完成') {
+        return true
+      }
+    }
+  }
 }
 </script>
 

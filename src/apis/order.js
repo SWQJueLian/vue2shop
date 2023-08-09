@@ -37,8 +37,13 @@ export const submitOrder = (params) => {
 }
 
 // 我的订单
-export const getOrderList = () => {
-  return request.get('/order/list')
+export const getOrderList = (type, page) => {
+  return request.get('/order/list', {
+    params: {
+      dataType: type,
+      page
+    }
+  })
 }
 
 // 获取订单详情
