@@ -92,7 +92,7 @@
             去结算({{ cartChoieNum }})
           </van-button>
           <van-button @click="deleteCartSKU" v-else round color="linear-gradient(to right, #ff6034, #ee0a24)">
-            删除({{ cartChoieNum }})
+            删除({{ cartCheckedNum }})
           </van-button>
         </div>
       </div>
@@ -200,7 +200,16 @@ export default {
   },
   computed: {
     ...mapState('cart', ['cartList']),
-    ...mapGetters('cart', ['cartChoieNum', 'cartLength', 'totalPrice', 'isAllChecked', 'choiceSKUIDs'])
+    ...mapGetters('cart', ['cartChoieNum', 'cartLength', 'totalPrice', 'isAllChecked', 'choiceSKUIDs']),
+    // 返回选中的商品总数（商品*购买数量）
+    cartCheckedNum () {
+      return this.cartList.reduce((sum, item) => {
+        if (item.isChecked) {
+          return sum + 1
+        }
+        return sum
+      }, 0)
+    }
   }
 }
 
