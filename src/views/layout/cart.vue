@@ -4,6 +4,11 @@
     <!-- 顶部导航条-->
     <van-nav-bar left-arrow title="购物车" fixed placeholder :right-text="isEdit ? '完成': '编辑'"
                  @click-right="editCart"/>
+    <van-notice-bar
+      mode="closeable"
+      left-icon="volume-o"
+      text="向左滑动商品可以进行 “收藏”、“删除” 的操作！"
+    />
     <div style="padding: 6px" v-if="cartLength>0">
       <!--商品SKU-->
       <van-swipe-cell v-for="item in cartList" :key="item.id">

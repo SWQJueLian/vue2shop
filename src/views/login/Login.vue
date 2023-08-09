@@ -57,7 +57,7 @@
 
       <div @click="loginSystem" class="login-btn">登录</div>
       <p style="padding-top: 10px">
-        手机号建议用13288888888，因为后台数据已经设置好了。也可以随便填一个。
+        手机号建议用{{ mobile }}，因为后台数据已经设置好了。也可以随便填一个。
       </p>
       <p>测试环境短信验证码为：246810</p>
     </div>
@@ -83,7 +83,7 @@ export default {
       codePic: '', // 图形验证码
       codeKey: '', // 图形验证码key
       code: '', // 用户输入的图形验证码
-      mobile: '13288888888', // 用户手机号
+      mobile: '13222222222', // 用户手机号
       smstimer: null,
       totalSecond: 5,
       currentSecond: 5,

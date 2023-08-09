@@ -1,5 +1,34 @@
 <template>
   <div>
+    <van-nav-bar fixed placeholder :safe-area-inset-top="true" left-arrow :border="false"
+                 @click-left="$router.go(-1)"
+    >
+      <template #title>
+        <!--
+        @focus="$router.push('/search')" # 获取焦点的时候重新进入搜索页，京东和淘宝都是这样的...
+        /home ->
+            /search -> /search-list -> /search -> /search-list
+        -->
+        <van-search
+          @focus="handleToRouter"
+          :clearable="false"
+          v-model="search_key"
+          shape="round"
+          placeholder="请输入搜索关键词">
+          <template #right-icon>
+            <van-icon @click="$toast('打开相机...')" name="paid" size="20"/>
+          </template>
+        </van-search>
+      </template>
+      <template #right>
+        <van-icon @click="$router.replace('/category')" class="tool" name="apps-o" size="22"/>
+      </template>
+    </van-nav-bar>
+    <van-notice-bar
+      mode="closeable"
+      left-icon="volume-o"
+      text="上拉自动加载更多数据！"
+    />
     <van-list
       :immediate-check='false'
       v-model="loading"
@@ -7,30 +36,6 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-nav-bar :safe-area-inset-top="true" left-arrow :border="false"
-                   @click-left="$router.go(-1)"
-      >
-        <template #title>
-          <!--
-          @focus="$router.push('/search')" # 获取焦点的时候重新进入搜索页，京东和淘宝都是这样的...
-          /home ->
-              /search -> /search-list -> /search -> /search-list
-          -->
-          <van-search
-            @focus="handleToRouter"
-            :clearable="false"
-            v-model="search_key"
-            shape="round"
-            placeholder="请输入搜索关键词">
-            <template #right-icon>
-              <van-icon @click="$toast('打开相机...')" name="paid" size="20"/>
-            </template>
-          </van-search>
-        </template>
-        <template #right>
-          <van-icon @click="$router.replace('/category')" class="tool" name="apps-o" size="22"/>
-        </template>
-      </van-nav-bar>
       <van-tabs v-model="active" @click="wrapperSortSearch" line-width="60">
         <van-tab name="all" title="👏综合推荐"></van-tab>
         <van-tab name="sales" title="📈销量"></van-tab>
@@ -146,6 +151,10 @@ export default {
 <style lang="less" scoped>
 ::v-deep .van-nav-bar__title {
   max-width: 100%;
+}
+
+.van-search {
+  padding: 0;
 }
 
 // 商品样式

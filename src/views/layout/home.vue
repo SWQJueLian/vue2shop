@@ -31,7 +31,13 @@
           </template>
         </van-search>
       </van-sticky>
-
+      <!-- code by me..-->
+      <van-notice-bar
+        color="#1989fa"
+        background="#ecf9ff"
+        left-icon="volume-o"
+        text="Coding By 宋炜权， 下拉可刷新首页数据！"
+      />
       <!-- 轮播图 -->
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
         <van-swipe-item v-for="item in bannerImgList" :key="item.imgUrl">
