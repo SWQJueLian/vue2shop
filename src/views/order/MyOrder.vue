@@ -23,7 +23,7 @@ export default {
   },
   data () {
     return {
-      active: 'all',
+      active: this.$route.query.dataType || 'all',
       orderDataList: []
     }
   },
