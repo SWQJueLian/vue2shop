@@ -1,8 +1,10 @@
 <template>
   <div style="text-align: start;">
     <!--二级路由入口-->
-    <router-view/>
-    <van-tabbar route placeholder v-model="active" active-color="#ee0a24" inactive-color="#000">
+    <keep-alive include="HomePage,CategoryPage">
+      <router-view/>
+    </keep-alive>
+    <van-tabbar route placeholder fixed safe-area-inset-bottom v-model="active" active-color="#ee0a24" inactive-color="#000">
       <van-tabbar-item to="/home" name="home" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item to="/category" name="category" icon="apps-o">分类</van-tabbar-item>
       <van-tabbar-item to="/cart" name="cart" icon="shopping-cart-o" :badge="cartLength">购物车</van-tabbar-item>

@@ -1,6 +1,22 @@
 <template>
   <div>
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh" style="min-height: 100vh;">
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh" :head-height="80" style="min-height: 100vh;">
+      <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
+      <template #pulling="props">
+        <img
+          class="doge"
+          src="https://img01.yzcdn.cn/vant/doge.png"
+          :style="{ transform: `scale(${props.distance / 80})` }"
+        />
+      </template>
+      <!-- 释放提示 -->
+      <template #loosing>
+        <img class="doge" src="https://img01.yzcdn.cn/vant/doge.png"/>
+      </template>
+      <!-- 加载提示 -->
+      <template #loading>
+        <img class="doge" src="https://img01.yzcdn.cn/vant/doge-fire.jpg"/>
+      </template>
       <!--顶部-->
       <van-sticky>
         <van-nav-bar
@@ -78,12 +94,15 @@ import { getHomeData } from '@/apis/home'
 export default {
   name: 'HomePage',
   components: { GoodsItem },
+  activated () {
+    console.log('HomePage activated')
+  },
+  deactivated () {
+    console.log('HomePage deactivated')
+  },
   async created () {
-    const { data: { pageData } } = await getHomeData()
-    // console.log(pageData)
-    this.bannerImgList = pageData.items[1].data
-    this.gridList = pageData.items[3].data
-    this.productList = pageData.items[6].data
+    console.log('homepage created...')
+    await this.initDataList()
   },
   data () {
     return {
@@ -95,27 +114,39 @@ export default {
     }
   },
   methods: {
-    onSearch () {
+    async initDataList () {
+      const { data: { pageData } } = await getHomeData()
+      // console.log(pageData)
+      this.bannerImgList = pageData.items[1].data
+      this.gridList = pageData.items[3].data
+      this.productList = pageData.items[6].data
     },
     onTabClick (name, title) {
       this.$toast(`切换到${title}`)
       // console.log(name, title)
     },
-    onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-      }, 1000)
+    async onRefresh () {
+      await this.initDataList()
+      await this.$toast('刷新成功')
+      this.isLoading = false
     }
   }
 }
 </script>
 
 <style scoped lang="less">
+.doge {
+  width: 140px;
+  height: 72px;
+  margin-top: 8px;
+  border-radius: 4px;
+}
+
 ::v-deep .van-tab--active {
   font-size: 16px !important;
   font-weight: bold !important;
 }
+
 .my-swipe .van-swipe-item {
   height: 165px;
   color: #fff;
