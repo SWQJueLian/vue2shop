@@ -3,12 +3,15 @@ import {
   PullRefresh, Image, Tabs, Icon, Button, Tabbar, TabbarItem, NavBar, Toast, Field, Form, Search, Sticky, Tab,
   Swipe, SwipeItem, Grid, GridItem, DropdownMenu, DropdownItem, GoodsAction, GoodsActionButton, GoodsActionIcon, Rate,
   List, Lazyload, Sku, Cell, CellGroup, SwipeCell, Card, Checkbox, CheckboxGroup, SubmitBar, Dialog, Tag, AddressList,
-  AddressEdit, ShareSheet, Radio, RadioGroup, Notify, Uploader, NoticeBar, Empty
+  AddressEdit, ShareSheet, Radio, RadioGroup, Notify, Uploader, NoticeBar, Empty, CouponCell, CouponList, Popup
 } from 'vant'
 
 Vue.use(Lazyload, {
   lazyComponent: true
 })
+Vue.use(CouponCell)
+Vue.use(Popup)
+Vue.use(CouponList)
 Vue.use(Empty)
 Vue.use(NoticeBar)
 Vue.use(Uploader)

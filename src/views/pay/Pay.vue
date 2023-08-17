@@ -58,10 +58,16 @@
           <span class="red">￥{{ order.orderPayPrice }}</span>
         </div>
 
-        <div class="pay-cell">
-          <span>优惠券：</span>
-          <span>无优惠券可用</span>
-        </div>
+        <!--<div class="pay-cell">-->
+          <!--<span>优惠券：</span>
+          <span>无优惠券可用</span>-->
+          <!-- 优惠券单元格 -->
+          <van-coupon-cell
+            :coupons="coupons"
+            :chosen-coupon="chosenCoupon"
+            @click="showList = true"
+          />
+        <!--</div>-->
 
         <div class="pay-cell">
           <span>配送费用：</span>
@@ -107,6 +113,21 @@
       <div class="left">实付款：<span>￥{{ order.orderPayPrice }}</span></div>
       <div class="tipsbtn" @click="handlerSubmitOrder">提交订单</div>
     </div>
+    <!-- 优惠券列表 -->
+    <van-popup
+      v-model="showList"
+      round
+      position="bottom"
+      style="height: 90%; padding-top: 4px;"
+    >
+      <van-coupon-list
+        :coupons="coupons"
+        :chosen-coupon="chosenCoupon"
+        :disabled-coupons="disabledCoupons"
+        @change="onChange"
+        @exchange="onExchange"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -115,7 +136,17 @@
 import { mapActions, mapGetters } from 'vuex'
 import { checkoutOrder, submitOrder } from '@/apis/order'
 import { Notify } from 'vant'
-
+const coupon = {
+  available: 1,
+  condition: '无使用门槛\n最多优惠12元',
+  reason: '',
+  value: 150,
+  name: '优惠券名称',
+  startAt: 1489104000,
+  endAt: 1514592000,
+  valueDesc: '1.5',
+  unitDesc: '元'
+}
 export default {
   name: 'PayIndex',
   data () {
@@ -123,7 +154,11 @@ export default {
       order: '', // 订单结算数据
       personal: '', // 个人数据
       radio: '1', // 支付方式
-      remark: '' // 买家留言
+      remark: '', // 买家留言,
+      chosenCoupon: -1,
+      coupons: [coupon],
+      disabledCoupons: [coupon],
+      showList: false
     }
   },
   computed: {
@@ -158,6 +193,13 @@ export default {
           this.$router.replace('/order')
         }
       }
+    },
+    onChange (index) {
+      this.showList = false
+      this.chosenCoupon = index
+    },
+    onExchange (code) {
+      this.coupons.push(coupon)
     }
   },
   async created () {
@@ -284,6 +326,10 @@ export default {
 
 .pay-detail {
   border-bottom: 1px solid #efefef;
+  .van-cell {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 .pay-way {
