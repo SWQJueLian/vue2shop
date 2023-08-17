@@ -16,7 +16,10 @@
         </ul>
       </div>
       <div class="right">
-        <div @click="$router.push(`/search_list?categoryId=${item.category_id}`)" v-for="item in list[activeIndex]?.children" :key="item.category_id" class="cate-goods">
+        <div class="my-empty" v-if="!list[activeIndex]?.children">
+          <van-empty description="空空如也~~~" style="padding-top: 50px" />
+        </div>
+        <div v-else @click="$router.push(`/search_list?categoryId=${item.category_id}`)" v-for="item in list[activeIndex]?.children" :key="item.category_id" class="cate-goods">
           <img v-lazy="item.image?.external_url" alt="">
           <p>{{ item.name }}</p>
         </div>
@@ -112,5 +115,12 @@ export default {
   width: 100%;
   top: 46px;
   z-index: 999;
+}
+
+.my-empty {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

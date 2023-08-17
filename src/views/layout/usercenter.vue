@@ -66,6 +66,10 @@
         <van-icon name="send-gift-o" :badge="orderTodoCount.received" />
         <span>待收货</span>
       </div>
+      <div class="order-navbar-item" @click="$router.push('/order?dataType=comment')">
+        <van-icon name="comment-o" badge="0" />
+        <span>待评价</span>
+      </div>
     </div>
 
     <div class="service">
