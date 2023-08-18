@@ -40,7 +40,7 @@
 import { addSkuToCart } from '@/apis/cart'
 import { mapMutations } from 'vuex'
 import { setCollectList } from '@/utils/stroage'
-import showNeedLoginDialog from '@/mixins/loginConfirmDialog'
+import showNeedLoginDialog from '@/mixins/login-confirm-dialog'
 
 export default {
   mixins: [showNeedLoginDialog],

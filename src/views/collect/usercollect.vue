@@ -50,7 +50,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { addSkuToCart } from '@/apis/cart'
 import { setCollectList } from '@/utils/stroage'
-import showNeedLoginDialog from '@/mixins/loginConfirmDialog'
+import showNeedLoginDialog from '@/mixins/login-confirm-dialog'
 
 export default {
   name: 'UserCollect',

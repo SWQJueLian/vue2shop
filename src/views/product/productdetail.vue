@@ -120,7 +120,7 @@ import { getProComments, getProCommentsCount, getProductDetail } from '@/apis/pr
 import defaultImg from '@/assets/default-avatar.png'
 import { mapGetters } from 'vuex'
 import { addSkuToCart } from '@/apis/cart'
-import showNeedLoginDialog from '@/mixins/loginConfirmDialog'
+import showNeedLoginDialog from '@/mixins/login-confirm-dialog'
 
 export default {
   name: 'ProductDetailPage',
