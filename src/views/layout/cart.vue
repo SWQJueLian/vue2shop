@@ -55,8 +55,8 @@
             <van-tag round plain type="danger" style="margin-right: 3px">极速退款</van-tag>
           </template>
           <template #num>
-            <CountBox :value="item.goods_num"
-                      @input="updateCartNum($event, item.goods_id, item.goods_sku_id)"></CountBox>
+            <count-box :value="item.goods_num"
+                      @input="updateCartNum($event, item.goods_id, item.goods_sku_id)"></count-box>
           </template>
         </van-card>
         <!--自定义右滑动的内容-->

@@ -80,7 +80,7 @@
         <p class="guess-title">—— 猜你喜欢 ——</p>
 
         <div class="goods-list">
-          <GoodsItem :goods="item" v-for="item in productList" :key="item.goods_id"></GoodsItem>
+          <goods-item :goods="item" v-for="item in productList" :key="item.goods_id"></goods-item>
         </div>
       </div>
     </van-pull-refresh>

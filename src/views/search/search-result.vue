@@ -42,7 +42,7 @@
         <van-tab name="price" :title="sort_price === -1 ? '💰价格⬇' : '💰价格⬆'"></van-tab>
       </van-tabs>
       <div class="goods-list">
-        <GoodsItem v-for="(item) in search_result_list" :key="item.goods_id" :goods="item"></GoodsItem>
+        <goods-item v-for="(item) in search_result_list" :key="item.goods_id" :goods="item"></goods-item>
       </div>
     </van-list>
   </div>
