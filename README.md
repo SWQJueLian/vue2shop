@@ -1,5 +1,7 @@
 # myshop
 
+## 在线预览：http://swqjuelian.github.io
+
 ## Project setup
 ```
 yarn install
